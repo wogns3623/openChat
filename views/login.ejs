@@ -1,0 +1,59 @@
+<body>
+    <div>
+        <form action="" accept-charset="UTF-8" name="user_info" id="user_info">
+            <div>
+                <label for="user_name">닉네임</label>
+                <input type="text" placeholder="ID" name="user_name" id="user_name" />
+            </div>
+            <div>
+                <label for="room_name">방이름</label>
+                <input type="text" placeholder="room" name="room_name" id="room_name" />
+            </div>
+            <div>
+                <button type="submit">접속하기</button>
+            </div>
+        </form>
+        <p>접속자수 : <%=visitors %></p>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        $(document).ready(function() {
+            var socket = io();
+            console.log(socket);
+            
+            $("form").submit(function(event) {
+                console.log('서버에 로그인정보를 보냅니다!');
+                event.preventDefault();
+                data = {
+                    user_name: $("#user_name").val(),
+                    room_name: $("#room_name").val(),
+                    socket_id: socket.id
+                }
+                socket.emit("login", data);
+            });
+        
+            socket.on('login success', function(userObj) {
+                console.log('login success!');
+
+                $.ajax({
+                    url: "/saveUserInfo",
+                    async: true,
+                    type: "POST",
+                    data: {
+                        socket_id: userObj.socket_id,
+                        user_name: userObj.name
+                    },
+                    dataType: "json",
+                    success: function(res) {
+                        location.href = "/lobby"
+                    },
+                });
+            });
+        
+            socket.on("login fail", function(data) {
+                console.log("이름이 같은 유저가 접속중입니다!");
+            })
+        });
+    </script>
+</body>

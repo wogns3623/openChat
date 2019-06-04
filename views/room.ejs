@@ -1,0 +1,22 @@
+<body>
+    <div id="chat"></div>
+    <div>
+        <form action="" accept-charset="UTF-8" name="user_info" id="user_info">
+            <div>
+                <input type="text" placeholder="내용을 입력하세요" name="msg_content" id="msg_content" />
+                <button type="submit">보내기</button>
+            </div>
+        </form>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        $(document).ready(function() {
+            var socket = io();
+            
+            socket.on('join room', function(data) {
+            });
+            
+        });
+    </script>
+</body>
