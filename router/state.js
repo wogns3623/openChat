@@ -5,17 +5,20 @@ class state {
     }
 
     addRoom(room) {
-        this.rooms[room.id] = room;
+        if(this.rooms[room.name] != undefined) return false;
+
+        this.rooms[room.name] = room;
+        return true;
     }
     
     removeRoom(room) {
-        delete this.rooms[room.id];
+        delete this.rooms[room.name];
     }
 
     addUser(user) {
-        var users = Object.values(this.users)
+        var userValues = Object.values(this.users)
         for ( var i=0; i<users.length; i++ ) {
-            if(user.name == users[i].name){
+            if(user.name == userValues[i].name){
                 return false;
             }
         }

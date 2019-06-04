@@ -1,7 +1,8 @@
 <body>
-    <div id="chat"></div>
+    <div id="chatArea"></div>
+    
     <div>
-        <form action="" accept-charset="UTF-8" name="user_info" id="user_info">
+        <form action="" accept-charset="UTF-8" name="message_info" id="message_info">
             <div>
                 <input type="text" placeholder="내용을 입력하세요" name="msg_content" id="msg_content" />
                 <button type="submit">보내기</button>
@@ -11,10 +12,39 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
+        var socket = io();
+        var user_name;
+
         $(document).ready(function() {
-            var socket = io();
             
-            socket.on('join room', function(data) {
+            socket.on('connect', function(data) {
+                socket.emit("get cookie", {socket_id: socket.id});
+            });
+            
+            socket.on('get cookie success', function(data) {
+                if(data.originSocket_id != socket.id) return;
+                user_name = data.user_name;
+                socket.id = data.socket_id;
+            });
+            
+            $("#message_info").submit(function(event) {
+                console.log('메시지를 송신합니다!');
+                event.preventDefault();
+
+                socket.on('send message', {
+                    writer: user_name,
+                    content: $("#msg_content").val(),
+                    date: Date()
+                });
+            });
+
+            socket.on("receive message", function(data) {
+                messageHtml = '<div class="message box" id="msg_box_${data.msg_id}">\
+                        <div class="message writer" id="msg_writer_${data.msg_id}">${data.msg_writer}</div>\
+                        <span class="message content" id="msg_content_${data.msg_id}">${data.msg_content}</span>\
+                        <span class="message date" id="msg_date_${data.msg_id}">${data.msg_date}</span>\
+                    </div>'
+                document.getElementById("chatArea").innerHTML += messageHtml;
             });
             
         });

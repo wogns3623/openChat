@@ -6,6 +6,7 @@ var server = http.createServer(app);
 
 var ejs = require('ejs');
 var fs = require("fs");
+var cookie = require('cookie');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
@@ -25,5 +26,5 @@ server.listen(3000, function() {
 
 var state = require('./router/state.js');
   
-var io = require('./router/io.js')(server, state);
+var io = require('./router/io.js')(server, state, cookie);
 var router = require('./router/main.js')(app, ejs, fs, state);

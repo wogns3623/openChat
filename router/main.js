@@ -14,8 +14,6 @@ module.exports = function(app, ejs, fs, state) {
     app.get('/lobby', function(req, res) {
         var userInfo = req.cookies.userInfo;
 
-        console.log(req.cookies);
-
         if(userInfo != undefined){
             var body = fs.readFileSync(app.get('views')+'/lobby.ejs', 'utf8');
             var bodyContent = ejs.render(body, {
@@ -63,7 +61,8 @@ module.exports = function(app, ejs, fs, state) {
             user_name: user_name
         }
 
-        res.cookie('userInfo', userInfo, {maxAge: 1000*60*3});
+        res.cookie('userInfo', userInfo);
+        // res.cookie('userInfo', userInfo, {maxAge: 1000*60*60});
 
         res.json(result);
     });

@@ -1,0 +1,55 @@
+<body>
+    <div id="userInfo">
+        <div>이름: <span id="user_name"></span></div>
+    </div>
+    <div id="rooms"></div>
+    <div>
+        <form action="" accept-charset="UTF-8" name="room_info" id="room_info">
+            <div>
+                <input type="text" placeholder="접속할 방 이름을 적어주세요" name="room_name" id="room_name" />
+                <button type="submit">참여하기</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+        var user_name;
+
+        $(document).ready(function() {
+
+            socket.on('connect', function(data) {
+                socket.emit("get cookie", {socket_id: socket.id});
+            });
+
+            socket.on("get cookie success", function(data) {
+                if(data.originSocket_id != socket.id) return;
+
+                console.log(socket.id);
+
+                socket.id = data.socket_id;
+                user_name = data.user_name;
+
+                document.getElementById("user_name").innerText = user_name;
+            });
+
+            $("#room_info").submit(function(event) {
+                console.log('서버에 접속할 방 정보를 보냅니다!');
+                event.preventDefault();
+                data = {
+                    room_name: $("#room_name").val(),
+                    socket_id: socket.id
+                }
+                socket.emit("join room", data);
+            });
+
+            socket.on("join room success", function(data) {
+                if(data.socket_id != socket.id) return;
+                location.href = "/room/"+data.room_name;
+            });
+            
+        });
+    </script>
+</body>
