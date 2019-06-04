@@ -1,0 +1,85 @@
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title> Openchat </title>
+		<style>
+			.chat_area{
+				position: absolute;
+				background: skyblue;
+				width: 1200px;
+				height: 600px;
+			}
+			.top_bar{
+				position: static;
+				background: #666666;
+				width: 1520px;
+				height: 50px
+			}
+			.list_area{
+				position: relative;
+				background: #808080;
+				left: 1200px;
+				width: 320px;
+				height: 600px;
+			}
+			.input_area{
+				position: relative;
+				background: blue;
+				width: 1520px;
+				height: 80px;
+			}
+
+			#room_picture{
+				margin-left: 10px;
+				width:50px;
+				height:30px;
+			}
+			#room_name{
+				font-size: 2em;
+				color: white;
+			}
+			#back_button{
+				float: right;
+				margin: 10px;
+				height: 30px;
+			}
+			#input_text{
+    			font: 1.3em sans-serif;
+    			margin: 10px;
+    			width: 1180px;
+    			-moz-box-sizing: border-box;
+    			box-sizing: border-box;
+   				border: 1px solid #999;
+			}
+			#input_button{
+				float: right;
+				margin: 10px;
+				margin-right: 200px;
+				width: 100px;
+				height: 60px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="top_bar">
+			<img src="" alt="" id=room_picture> <!-- 방 대표 이미지-->
+			<span id="room_name"> 방제목 </span>
+			<span><input type="button" value="뒤로가기" id="back_button"></span>
+		</div>
+
+		<div class="chat_area">
+			실제 채팅 영역 입니다.
+		</div>
+
+		<div class="list_area">  <!-- 방 인윈 표시(프로필 이름,프로필 사진,총 인원수/최대 인원수) -->
+
+		</div>
+
+		<div class="input_area">
+			<form name=" input" method="post" action=""> <!-- 메세지 입력-->
+				<textarea id="input_text" placeholder="여기에 보낼 메세지를 입력하세요."></textarea>
+				<button type="submit" id="input_button">메세지 보내기</button>
+			</form>
+		</div>
+	</body>
+</html>
