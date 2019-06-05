@@ -1,54 +1,41 @@
 module.exports = function(app, ejs, fs, state) {
 
     app.get('/', function(req, res) {
-        var body = fs.readFileSync(app.get('views')+'/login.ejs', 'utf8');
-        var bodyContent = ejs.render(body, {
+        res.render('login', {
+            title: 'login',
             visitors: Object.keys(state.users).length
         });
-        res.render('index', {
-            title: 'login',
-            content: bodyContent
-        })
     });
     
     app.get('/lobby', function(req, res) {
         var userInfo = req.cookies.userInfo;
 
-        if(userInfo != undefined){
-            var body = fs.readFileSync(app.get('views')+'/lobby.ejs', 'utf8');
-            var bodyContent = ejs.render(body, {
+        if(userInfo != undefined && state.users[userInfo.user_name] != undefined){
+            res.render('lobby', {
+                title: 'lobby'
             });
-            res.render('index', {
-                title: 'lobby',
-                content: bodyContent
-            })
         } else {
             res.redirect('/');
         }
     });
 
     app.get('/room/:roomName', function(req, res) {
-        var body = fs.readFileSync(app.get('views')+'/room.ejs', 'utf8');
-        var bodyContent = ejs.render(body, {
-            socketObj: 0
-        });
-        res.render('index', {
-            title: req.params.roomName,
-            content: bodyContent
-        })
+        var userInfo = req.cookies.userInfo;
+        // console.log("userInformation is ",userInfo);
+        if(userInfo != undefined && state.users[userInfo.user_name] != undefined){
+            res.render('room', {
+                title: req.params.roomName,
+            });
+        } else {
+            res.redirect('/');
+        }
+       
     });
 
     app.post('/saveUserInfo', function(req, res) {
-
-        var socket_id = req.body.socket_id;
         var user_name = req.body.user_name;
         
-        var result = {
-        }
-
-        // Object.keys(req.body).forEach(function(item) {
-        //     console.log(item+" is "+req.body[item]);
-        // });
+        var result = {};
 
         if(req.cookies.userInfo == undefined){
             result['override'] = false;
@@ -57,9 +44,8 @@ module.exports = function(app, ejs, fs, state) {
         }
 
         var userInfo = {
-            socket_id: socket_id,
             user_name: user_name
-        }
+        };
 
         res.cookie('userInfo', userInfo);
         // res.cookie('userInfo', userInfo, {maxAge: 1000*60*60});

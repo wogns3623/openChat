@@ -1,8 +1,8 @@
 module.exports = class message{
-    constructor(id, writer, contents, date, isJoinMsg = false){
+    constructor(id, writer, content, date, isJoinMsg = false){
         this.id = id;
         this.writer = writer;
-        this.contents = contents;
+        this.content = content;
         this.date = date;
         this.isJoinMsg = isJoinMsg;
     }

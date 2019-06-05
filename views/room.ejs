@@ -1,52 +1,77 @@
-<body>
-    <div id="chatArea"></div>
-    
-    <div>
-        <form action="" accept-charset="UTF-8" name="message_info" id="message_info">
-            <div>
-                <input type="text" placeholder="내용을 입력하세요" name="msg_content" id="msg_content" />
-                <button type="submit">보내기</button>
-            </div>
-        </form>
-    </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-        var socket = io();
-        var user_name;
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title><%=title %></title>
+    </head>
 
-        $(document).ready(function() {
-            
-            socket.on('connect', function(data) {
-                socket.emit("get cookie", {socket_id: socket.id});
-            });
-            
-            socket.on('get cookie success', function(data) {
-                if(data.originSocket_id != socket.id) return;
-                user_name = data.user_name;
-                socket.id = data.socket_id;
-            });
-            
-            $("#message_info").submit(function(event) {
-                console.log('메시지를 송신합니다!');
-                event.preventDefault();
+    <body>
+        <div id="chatArea"></div>
+        
+        <div>
+            <form action="" accept-charset="UTF-8" name="message_info" id="message_info">
+                <div>
+                    <input type="text" placeholder="내용을 입력하세요" name="msg_content" id="msg_content"  maxlength="60" autofocus required/>
+                    <button type="submit">보내기</button>
+                </div>
+            </form>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io();
 
-                socket.on('send message', {
-                    writer: user_name,
-                    content: $("#msg_content").val(),
-                    date: Date()
-                });
-            });
-
-            socket.on("receive message", function(data) {
-                messageHtml = '<div class="message box" id="msg_box_${data.msg_id}">\
-                        <div class="message writer" id="msg_writer_${data.msg_id}">${data.msg_writer}</div>\
-                        <span class="message content" id="msg_content_${data.msg_id}">${data.msg_content}</span>\
-                        <span class="message date" id="msg_date_${data.msg_id}">${data.msg_date}</span>\
+            var addMessage = function(currentMsg) {
+                messageHtml = '<div class="message box" id="msg_box_'+currentMsg.id+'">\
+                    <div class="message writer" id="msg_writer_'+currentMsg.id+'">'+currentMsg.writer+'</div>\
+                    <span class="message content" id="msg_content_'+currentMsg.id+'">'+currentMsg.content+'</span>\
+                    <span class="message date" id="msg_date_'+currentMsg.id+'">'+currentMsg.date+'</span>\
                     </div>'
                 document.getElementById("chatArea").innerHTML += messageHtml;
+            };
+    
+            $(document).ready(function() {
+                
+                socket.on('connect', function(data) {
+                    socket.emit("get cookie");
+                });
+                
+                socket.on('get cookie success', function(data) {
+                    socket.user_name = data.user_name;
+                    //socket.id = socket.user_name;
+                    socket.emit('join room', {
+                        user_name: socket.user_name
+                    });
+                });
+                
+                $("#message_info").submit(function(event) {
+                    console.log('메시지를 송신합니다!');
+                    event.preventDefault();
+    
+                    socket.emit('send message', {
+                        content: $("#msg_content").val(),
+                        date: Date(),
+                        user_name: socket.user_name
+                    });
+                    $("#msg_content").val('');
+                });
+
+                socket.on("receive beforeMessages", function(data) {
+                    console.log("이전에 주고받은 메시지들을 수신하였습니다!");
+                    //if(currentMsg.isJoinMsg) //TODO join메시지만의 형식 필요함
+                    for(var i=0; i<data.msgs.length; i++){
+                        var msg = data.msgs[i];
+                        addMessage(msg);
+                    }
+                });
+                
+                socket.on("receive message", function(data) {
+                    console.log("메시지를 수신하였습니다!");
+                    //if(currentMsg.isJoinMsg) //TODO join메시지만의 형식 필요함
+                    addMessage(data.msg);
+                });
+                
             });
-            
-        });
-    </script>
-</body>
+        </script>
+    </body>
+</html>

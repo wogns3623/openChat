@@ -1,57 +1,98 @@
-<body>
-    <div>
-        <form action="" accept-charset="UTF-8" name="user_info" id="user_info">
-            <div>
-                <label for="user_name">닉네임</label>
-                <input type="text" placeholder="ID" name="user_name" id="user_name" />
-                <button type="submit">접속하기</button>
-            </div>
-        </form>
-        <p>접속자수 : <span id="visitors"><%=visitors %></span></p>
-    </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-        var socket = io();
-        $(document).ready(function() {
+<!-- <!DOCTYPE html> -->
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title><%=title %></title>
+        <style>
+            .profile_picture{
+                position: relative;
+                width: auto;
+                text-align: center;
+                padding-top: 200px;
+            }
+            #picture{
+                width: 250px;
+                height: 250px;
+            }
+            .profile_name{
+                position: relative;
+                text-align: center;
+                margin: 10px;
+            }
+            #user_name{
+                width: 250px;
+                height: 30px;
+            }
+            #submitBtn{
+                width: 50px;
+                height: 30px;
+            }
             
-            $("#user_info").submit(function(event) {
-                console.log('서버에 로그인정보를 보냅니다!');
-                event.preventDefault();
-                data = {
-                    user_name: $("#user_name").val(),
-                    socket_id: socket.id
-                }
-                socket.emit("login", data);
-            });
+        </style>
+    </head>
+    
+    <body>
+        <div class="profile_picture">
+			<img src="" alt="" id="picture" onclick="">
+			<!--
+				<p></p>
+				<input type="file">
+			-->
+        </div>
         
-            socket.on('login success', function(userObj) {
-                //if(userObj.socket_id != socket.id) return;
-                console.log('login success!');
+		<div class="profile_name">
+            <form action="" accept-charset="UTF-8" name="user_info" id="user_info">
+                <div>
+                    <input type="text" placeholder="프로필 이름" name="user_name" id="user_name" autofocus required/>
+                    <button type="submit" id="submitBtn">입장</button>
+                </div>
+            </form>
+        </div>
+        
+		<div class="count">
+            접속자수 : <span id="visitors"><%=visitors %></span>
+        </div>
 
-                $.ajax({
-                    url: "/saveUserInfo",
-                    async: true,
-                    type: "POST",
-                    data: {
-                        socket_id: userObj.socket_id,
-                        user_name: userObj.name
-                    },
-                    dataType: "json",
-                    success: function(res) {
-                        location.href = "/lobby"
-                    },
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io();
+            $(document).ready(function() {
+                
+                $("#user_info").submit(function(event) {
+                    console.log('서버에 로그인정보를 보냅니다!');
+                    event.preventDefault();
+                    data = {
+                        user_name: $("#user_name").val()
+                    }
+                    socket.emit("login", data);
+                });
+            
+                socket.on('login success', function(userObj) {
+                    console.log('login success!');
+    
+                    $.ajax({
+                        url: "/saveUserInfo",
+                        async: true,
+                        type: "POST",
+                        data: {
+                            user_name: userObj.name
+                        },
+                        dataType: "json",
+                        success: function(res) {
+                            location.href = "/lobby"
+                        },
+                    });
+                });
+            
+                socket.on("login fail", function(data) {
+                    console.log("이름이 같은 유저가 접속중입니다!");
+                });
+    
+                socket.on("change visitor", function(data) {
+                    document.getElementById("visitors").innerText = data.visitors;
                 });
             });
-        
-            socket.on("login fail", function(data) {
-                //if(data.socket_id != socket.id) return;
-                console.log("이름이 같은 유저가 접속중입니다!");
-            });
-
-            socket.on("change visitor", function(data) {
-                document.getElementById("visitors").innerText = data.visitors;
-            });
-        });
-    </script>
-</body>
+        </script>
+    </body>
+</html>

@@ -3,27 +3,22 @@ module.exports = class room{
         this.id = id;
         this.name = name;
         this.admin = admin;
-        this.connectUser(this.admin);
-
+        
         this.img = img;
         this.maxUser = maxUser;
         this.password = password;
-
+        
         this.messages = [];
         this.users = {};
+
+        this.connectUser(admin);
     }
 
     connectUser(user){
+        console.log(user);
+        
         user.connectRoom(this);
-        this.users[user.socket_id] = user;
-
-        this.addMessage(new message(
-            this.messages.length,
-            user.name,
-            "user +"+user.name+" join the room!",
-            Date(),
-            true
-        ));
+        this.users[user.name] = user;
     }
 
     disconnectUser(user, callback){
@@ -35,15 +30,17 @@ module.exports = class room{
             callback(this);
         } else {
             user.disconnectRoom(this);
-            delete this.users[user.socket_id];
+            delete this.users[user.name];
 
-            this.addMessage(new message(
-                this.messages.length,
-                user.name,
-                "user +"+user.name+" leave the room",
-                Date(),
-                true
-            ));
+            // this.addMessage(new message(
+            //     this.messages.length,
+            //     user.name,
+            //     "user +"+user.name+" leave the room",
+            //     Date(),
+            //     true
+            // ));
+            
+            return true;
         }
     }
 

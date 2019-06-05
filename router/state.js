@@ -5,7 +5,7 @@ class state {
     }
 
     addRoom(room) {
-        if(this.rooms[room.name] != undefined) return false;
+        if(this.rooms[room.name]) return false;
 
         this.rooms[room.name] = room;
         return true;
@@ -16,14 +16,9 @@ class state {
     }
 
     addUser(user) {
-        var userValues = Object.values(this.users)
-        for ( var i=0; i<users.length; i++ ) {
-            if(user.name == userValues[i].name){
-                return false;
-            }
-        }
+        if(this.users[user.name]) return false;
 
-        this.users[user.socket_id] = user;
+        this.users[user.name] = user;
         return true;
     }
 

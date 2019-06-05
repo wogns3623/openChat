@@ -1,9 +1,8 @@
 module.exports = class user{
-    constructor(id, name, img, socket_id){
+    constructor(id, name, img){
         this.id = id;
         this.name = name;
         this.img = img;
-        this.socket_id = socket_id;
         this.connectedRoom = null
     }
     
