@@ -3,7 +3,6 @@ module.exports = function(app, ejs, fs, state) {
     app.get('/', function(req, res) {
         res.render('login', {
             title: 'login',
-            visitors: Object.keys(state.users).length
         });
     });
     

@@ -4,11 +4,25 @@
         <meta charset="UTF-8">
         <title><%=title %></title>
         <style>
+            .body{
+                background-color: #aaaaaa
+            }
+            .profile_container{
+                position: relative;
+                width: 400px;
+                height: 600px;
+
+                background-color: aqua;
+                
+                box-shadow: 1px 2px 2px 1px gray;
+                margin-top: 100px;
+                margin-left: calc(50% - 200px);
+            }
             .profile_picture{
                 position: relative;
                 width: auto;
                 text-align: center;
-                padding-top: 200px;
+                padding-top: 70px;
             }
             #picture{
                 width: 250px;
@@ -32,25 +46,27 @@
     </head>
     
     <body>
-        <div class="profile_picture">
-			<img src="" alt="" id="picture" onclick="">
-			<!--
-				<p></p>
-				<input type="file">
-			-->
-        </div>
-        
-		<div class="profile_name">
-            <form action="" accept-charset="UTF-8" name="user_info" id="user_info">
-                <div>
-                    <input type="text" placeholder="프로필 이름" name="user_name" id="user_name" autofocus required/>
-                    <button type="submit" id="submitBtn">입장</button>
-                </div>
-            </form>
-        </div>
-        
-		<div class="count">
-            접속자수 : <span id="visitors"><%=visitors %></span>
+        <div class="profile_container">
+            <div class="profile_picture">
+                <img src="" alt="" id="picture" onclick="">
+                <!--
+                    <p></p>
+                    <input type="file">
+                -->
+            </div>
+            
+            <div class="profile_name">
+                <form action="" accept-charset="UTF-8" name="user_info" id="user_info">
+                    <div>
+                        <input type="text" placeholder="프로필 이름" name="user_name" id="user_name" autofocus required/>
+                        <button type="submit" id="submitBtn">입장</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="count">
+                접속자수 : <span id="visitors"></span>
+            </div>
         </div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
@@ -58,7 +74,11 @@
         <script>
             var socket = io();
             $(document).ready(function() {
-                
+                socket.on('connect', function() {
+                    socket.emit("get visitor");
+                });
+                  
+
                 $("#user_info").submit(function(event) {
                     console.log('서버에 로그인정보를 보냅니다!');
                     event.preventDefault();

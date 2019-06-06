@@ -3,13 +3,17 @@ var user = require('./user');
 var message = require('./message');
 
 
-module.exports = function(server, state, cookie){
+module.exports = function(server, state, cookie) {
     
     var getUserName = function(socket) {
-        var clientCookie = cookie.parse(socket.handshake.headers.cookie);
-        // console.log(clientCookie);
-        var userInfo = JSON.parse(clientCookie.userInfo.substr(2));
-        return userInfo.user_name
+        if(socket.handshake.headers.cookie) {
+            var clientCookie = cookie.parse(socket.handshake.headers.cookie);
+            if(clientCookie.userInfo) {
+                var userInfo = JSON.parse(clientCookie.userInfo.substr(2));
+                return userInfo.user_name
+            }
+        }
+        return;
     }
 
     var io = require('socket.io')(server);
@@ -25,7 +29,7 @@ module.exports = function(server, state, cookie){
             if( state.addUser(currentUser) ) {
                 console.log('login success!');
                 socket.emit('login success', currentUser);
-                console.log("바뀐 접속자 수 데이터를 보냅니다!", state.users);
+                console.log("바뀐 접속자 수 데이터를 보냅니다!");
                 io.emit('change visitor', {visitors: Object.keys(state.users).length});
 
             } else {
@@ -34,18 +38,24 @@ module.exports = function(server, state, cookie){
             }
         });
 
+        socket.on('get visitor', function() {
+            socket.emit('change visitor', {visitors: Object.keys(state.users).length});
+        });
+
         socket.on('get cookie', function() {
             // var clientCookie = cookie.parse(socket.handshake.headers.cookie);
             // var userInfo = JSON.parse(clientCookie.userInfo.substr(2));
             var currentUser = state.users[getUserName(socket)];
-            if(currentUser) {
+            if(currentUser == undefined) {
+                console.log("connect fail")
+                socket.emit('connection fail');
+                return;
+            } else {
                 currentUser.setSocket(socket);
     
                 socket.emit('get cookie success', {
                     user_name: currentUser.name
                 });
-            } else {
-                socket.emit('connection fail');
             }
         });
 
@@ -67,8 +77,17 @@ module.exports = function(server, state, cookie){
 
         socket.on('join room', function(data) {
             var currentUser = state.users[getUserName(socket)];
-            // console.log(currentUser);
+            if(currentUser == undefined) {
+                socket.emit('connection fail');
+                return;
+            }
+            
             var currentRoom = state.rooms[data.room_name];
+            if( currentRoom == undefined) {
+                socket.emit('remove room');
+                return;
+            }
+
             currentRoom.connectUser(currentUser);
 
             socket.join(currentRoom.name, function() {
@@ -96,7 +115,10 @@ module.exports = function(server, state, cookie){
         socket.on('send message', function(data) {
             // console.log(data);
             var currentUser = state.users[getUserName(socket)];
-            console.log(currentUser);
+            if(currentUser == undefined) {
+                socket.emit('connection fail');
+                return;
+            }
             if(currentUser) {
                 var currentRoom = currentUser.connectedRoom;
                 var msg = new message(
@@ -117,7 +139,10 @@ module.exports = function(server, state, cookie){
 
         socket.on('disconnect', function(reason) {
             var currentUser = state.users[getUserName(socket)];
-            if(currentUser == undefined) return;
+            if(currentUser == undefined) {
+                socket.emit('connection fail');
+                return;
+            }
             console.log("user "+currentUser.name+" disconnected because of "+reason);
 
             if(currentUser.connectedRoom != null){
