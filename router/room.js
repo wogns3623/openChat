@@ -10,37 +10,28 @@ module.exports = class room{
         
         this.messages = [];
         this.users = {};
-
-        this.connectUser(admin);
     }
 
     connectUser(user){
-        console.log(user);
-        
         user.connectRoom(this);
         this.users[user.name] = user;
     }
 
-    disconnectUser(user, callback){
-        if(user == admin) {
-            for( [key, value] of Object.entries(this.users) ){
-                value.disconnectRoom(this);
+    disconnectUser(user){
+        if(this.users[user.name] == undefined) {
+            return false;
+        } else if(user == this.admin) {
+            var userArr = Object.values(this.users);
+            for( var i=0; i<userArr.length; i++ ){
+                userArr[i].disconnectRoom(this);
             }
 
-            callback(this);
+            return 2;
         } else {
             user.disconnectRoom(this);
             delete this.users[user.name];
 
-            // this.addMessage(new message(
-            //     this.messages.length,
-            //     user.name,
-            //     "user +"+user.name+" leave the room",
-            //     Date(),
-            //     true
-            // ));
-            
-            return true;
+            return 1;
         }
     }
 

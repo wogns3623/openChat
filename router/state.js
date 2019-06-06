@@ -23,7 +23,7 @@ class state {
     }
 
     removeUser(user) {
-        delete this.users[user.id];
+        delete this.users[user.name];
     }
 }
 

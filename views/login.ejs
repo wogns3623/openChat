@@ -90,6 +90,7 @@
                 });
     
                 socket.on("change visitor", function(data) {
+                    console.log("visitors change!");
                     document.getElementById("visitors").innerText = data.visitors;
                 });
             });

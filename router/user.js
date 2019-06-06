@@ -4,6 +4,11 @@ module.exports = class user{
         this.name = name;
         this.img = img;
         this.connectedRoom = null
+        this.currentSocket = null
+    }
+
+    setSocket(socket) {
+        this.currentSocket = socket;
     }
     
     connectRoom(room) {
@@ -12,5 +17,6 @@ module.exports = class user{
 
     disconnectRoom() {
         this.connectedRoom = null;
+        this.currentSocket.emit('remove room');
     }
 }

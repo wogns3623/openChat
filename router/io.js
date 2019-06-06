@@ -2,7 +2,16 @@ var room = require('./room');
 var user = require('./user');
 var message = require('./message');
 
+
 module.exports = function(server, state, cookie){
+    
+    var getUserName = function(socket) {
+        var clientCookie = cookie.parse(socket.handshake.headers.cookie);
+        // console.log(clientCookie);
+        var userInfo = JSON.parse(clientCookie.userInfo.substr(2));
+        return userInfo.user_name
+    }
+
     var io = require('socket.io')(server);
     io.sockets.on('connection', function(socket) {
 
@@ -16,6 +25,7 @@ module.exports = function(server, state, cookie){
             if( state.addUser(currentUser) ) {
                 console.log('login success!');
                 socket.emit('login success', currentUser);
+                console.log("바뀐 접속자 수 데이터를 보냅니다!", state.users);
                 io.emit('change visitor', {visitors: Object.keys(state.users).length});
 
             } else {
@@ -25,20 +35,29 @@ module.exports = function(server, state, cookie){
         });
 
         socket.on('get cookie', function() {
-            var clientCookie = cookie.parse(socket.handshake.headers.cookie);
-            var userInfo = JSON.parse(clientCookie.userInfo.substr(2));
-            socket.emit('get cookie success', {
-                user_name: userInfo.user_name
-            });
+            // var clientCookie = cookie.parse(socket.handshake.headers.cookie);
+            // var userInfo = JSON.parse(clientCookie.userInfo.substr(2));
+            var currentUser = state.users[getUserName(socket)];
+            if(currentUser) {
+                currentUser.setSocket(socket);
+    
+                socket.emit('get cookie success', {
+                    user_name: currentUser.name
+                });
+            } else {
+                socket.emit('connection fail');
+            }
         });
 
-        socket.on('create room', function(data) {
-            state.addRoom(new room(
-                Object.keys(state.rooms).length+1,
-                data.room_name,
-                state.users[data.user_name],
-                null
-            ));
+        socket.on('enter room', function(data) {
+            if(state.rooms[data.room_name] == undefined){
+                state.addRoom(new room(
+                    Object.keys(state.rooms).length+1,
+                    data.room_name,
+                    state.users[getUserName(socket)],
+                    null
+                ));
+            }
 
             socket.emit('enter room success', {
                 room_name: data.room_name
@@ -47,48 +66,94 @@ module.exports = function(server, state, cookie){
         });
 
         socket.on('join room', function(data) {
-            var currentUser = state.users[data.user_name];
+            var currentUser = state.users[getUserName(socket)];
             // console.log(currentUser);
-            
-            var room = currentUser.connectedRoom;
-            socket.join(room.name, function() {
-                console.log(data.user_name+' successfuly join in room '+room.name);
+            var currentRoom = state.rooms[data.room_name];
+            currentRoom.connectUser(currentUser);
+
+            socket.join(currentRoom.name, function() {
+                console.log(currentUser.name+' successfuly join in room '+currentRoom.name);
 
                 var msg = new message(
-                    this.messages.length,
-                    user.name,
-                    "user "+user.name+" join the room!",
-                    Date(),
+                    currentRoom.messages.length,
+                    currentUser.name,
+                    "user "+currentUser.name+" join the room!",
+                    new Date().toISOString(),
                     true
                 );
-                room.addMessage(msg);
+                currentRoom.addMessage(msg);
 
                 socket.emit('receive beforeMessages', {
-                    msgs: room.messages
+                    msgs: currentRoom.messages
                 });
                 // console.log(Object.keys(socket.rooms)[1]);
-                io.to(room.name).emit('receive message', {
+                socket.broadcast.to(currentRoom.name).emit('receive message', {
                     msg: msg
-                })
+                });
             });
         });
 
         socket.on('send message', function(data) {
             // console.log(data);
-            var currentUser = state.users[data.user_name];
-            var room = currentUser.connectedRoom;
-            var msg = new message(
-                room.messages.length,
-                data.user_name,
-                data.content,
-                data.date
-            );
-            room.addMessage(msg);
+            var currentUser = state.users[getUserName(socket)];
+            console.log(currentUser);
+            if(currentUser) {
+                var currentRoom = currentUser.connectedRoom;
+                var msg = new message(
+                    currentRoom.messages.length,
+                    currentUser.name,
+                    data.content,
+                    data.date
+                );
+                currentRoom.addMessage(msg);
+    
+                io.to(currentRoom.name).emit('receive message', {
+                    msg: msg
+                });
+            } else {
+                socket.emit('connection fail');
+            }
+        });
 
-            io.to(room.name).emit('receive message', {
-                msg: msg
-            })
-        })
+        socket.on('disconnect', function(reason) {
+            var currentUser = state.users[getUserName(socket)];
+            if(currentUser == undefined) return;
+            console.log("user "+currentUser.name+" disconnected because of "+reason);
+
+            if(currentUser.connectedRoom != null){
+                var currentRoom = currentUser.connectedRoom;
+                var result = currentRoom.disconnectUser(currentUser);
+                if( result == 1 ){
+                    var msg = new message(
+                        currentRoom.messages.length,
+                        currentUser.name,
+                        "user "+currentUser.name+" leave the room",
+                        new Date().toISOString(),
+                        true
+                    );
+                    currentRoom.addMessage(msg);
+        
+                    io.to(currentRoom.name).emit('receive message', {
+                        msg: msg
+                    });
+                    console.log("user "+currentUser.name+" leave room");
+                } else if(result == 2) {
+                    state.removeRoom(currentRoom);
+                    console.log("room Removed!");
+                } else {
+                    console.log("그 유저는 방에 없어요!");
+                }
+            }
+            setTimeout(function(user) {
+                // console.log(user.currentSocket);
+                if(user.currentSocket.disconnected) {
+                    console.log("remove user "+user.name+" success!");
+                    state.removeUser(user);
+                    // console.log(state.users);
+                    io.emit('change visitor', {visitors: Object.keys(state.users).length});
+                }
+            }, 1000, currentUser);
+        });
     });
     return io;
 }

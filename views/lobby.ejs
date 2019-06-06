@@ -39,14 +39,17 @@
                     console.log('서버에 접속할 방 정보를 보냅니다!');
                     event.preventDefault();
                     data = {
-                        room_name: $("#room_name").val(),
-                        user_name: socket.user_name
+                        room_name: $("#room_name").val()
                     }
-                    socket.emit("create room", data);
+                    socket.emit("enter room", data);
                 });
     
                 socket.on("enter room success", function(data) {
                     location.href = "/room/"+data.room_name;
+                });
+
+                socket.on("connection fail", function() {
+                    location.href = "/";
                 });
                 
             });

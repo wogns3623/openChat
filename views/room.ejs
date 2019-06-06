@@ -1,34 +1,107 @@
-<!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title><%=title %></title>
-    </head>
+	<head>
+		<meta charset="utf-8"/>
+		<title> Openchat </title>
+		<style>
+			#chat_area{
+				position: absolute;
+				background: skyblue;
+				width: 1200px;
+                height: 600px;
+                overflow-y: auto;
+                overflow-x: hidden;
+			}
+			.top_bar{
+				position: static;
+				background: #666666;
+				width: 1520px;
+				height: 50px
+			}
+			#list_area{
+				position: relative;
+				background: #808080;
+				left: 1200px;
+				width: 320px;
+				height: 600px;
+			}
+			.input_area{
+				position: relative;
+				background: blue;
+				width: 1520px;
+				height: 80px;
+			}
 
-    <body>
-        <div id="chatArea"></div>
-        
-        <div>
+			#room_picture{
+				margin-left: 10px;
+				width:50px;
+				height:30px;
+			}
+			#room_name{
+				font-size: 2em;
+				color: white;
+			}
+			#back_button{
+				float: right;
+				margin: 10px;
+				height: 30px;
+			}
+			#msg_content{
+    			font: 1.3em sans-serif;
+    			margin: 10px;
+    			width: 1180px;
+    			-moz-box-sizing: border-box;
+    			box-sizing: border-box;
+   				border: 1px solid #999;
+			}
+			#input_button{
+				float: right;
+				margin: 10px;
+				margin-right: 200px;
+				width: 100px;
+				height: 60px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="top_bar">
+			<img src="" alt="" id=room_picture> <!-- 방 대표 이미지-->
+			<span id="room_name"> 방제목 </span>
+			<span><input type="button" value="뒤로가기" id="back_button"></span>
+		</div>
+
+		<div id="chat_area">
+		</div>
+
+		<div id="list_area">  <!-- 방 인윈 표시(프로필 이름,프로필 사진,총 인원수/최대 인원수) -->
+
+		</div>
+
+		<div class="input_area">
             <form action="" accept-charset="UTF-8" name="message_info" id="message_info">
-                <div>
-                    <input type="text" placeholder="내용을 입력하세요" name="msg_content" id="msg_content"  maxlength="60" autofocus required/>
-                    <button type="submit">보내기</button>
-                </div>
+                <input type="text" placeholder="내용을 입력하세요" name="msg_content" id="msg_content"  maxlength="60" autofocus required/>
+                <button type="submit" id="input_button">메세지 보내기</button>
             </form>
-        </div>
+		</div>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <script>
             var socket = io();
 
             var addMessage = function(currentMsg) {
+                var chat_area = document.getElementById("chat_area");
                 messageHtml = '<div class="message box" id="msg_box_'+currentMsg.id+'">\
                     <div class="message writer" id="msg_writer_'+currentMsg.id+'">'+currentMsg.writer+'</div>\
                     <span class="message content" id="msg_content_'+currentMsg.id+'">'+currentMsg.content+'</span>\
                     <span class="message date" id="msg_date_'+currentMsg.id+'">'+currentMsg.date+'</span>\
                     </div>'
-                document.getElementById("chatArea").innerHTML += messageHtml;
+                chat_area.innerHTML += messageHtml;
+                chat_area.scrollTop = chat_area.scrollHeight;
             };
+            
+            var leaveRoom = function() {
+                socket.disconnect();
+            }
     
             $(document).ready(function() {
                 
@@ -40,7 +113,7 @@
                     socket.user_name = data.user_name;
                     //socket.id = socket.user_name;
                     socket.emit('join room', {
-                        user_name: socket.user_name
+                        room_name: location.href.split("/")[4]
                     });
                 });
                 
@@ -50,8 +123,7 @@
     
                     socket.emit('send message', {
                         content: $("#msg_content").val(),
-                        date: Date(),
-                        user_name: socket.user_name
+                        date: new Date().toISOString(),
                     });
                     $("#msg_content").val('');
                 });
@@ -70,8 +142,18 @@
                     //if(currentMsg.isJoinMsg) //TODO join메시지만의 형식 필요함
                     addMessage(data.msg);
                 });
+
+                socket.on("connection fail", function() {
+                    location.href = "/";
+                });
+
+                socket.on("remove room", function() {
+                    console.log("방장이 방을 나가 방이 사라졌습니다.");
+
+                    location.href = "/lobby";
+                });
                 
             });
         </script>
-    </body>
+	</body>
 </html>

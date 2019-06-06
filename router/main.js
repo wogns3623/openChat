@@ -21,15 +21,16 @@ module.exports = function(app, ejs, fs, state) {
 
     app.get('/room/:roomName', function(req, res) {
         var userInfo = req.cookies.userInfo;
-        // console.log("userInformation is ",userInfo);
-        if(userInfo != undefined && state.users[userInfo.user_name] != undefined){
+        if(userInfo == undefined || state.users[userInfo.user_name] == undefined){
+            // console.log("userInformation is ",userInfo);
+            res.redirect('/');
+        } else if(state.rooms[req.params.roomName] == undefined ) {
+            res.redirect('/lobby');
+        } else {
             res.render('room', {
                 title: req.params.roomName,
             });
-        } else {
-            res.redirect('/');
         }
-       
     });
 
     app.post('/saveUserInfo', function(req, res) {
