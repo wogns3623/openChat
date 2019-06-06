@@ -28,6 +28,7 @@
     border: 1px solid blue;
     overflow-y:scroll;
     background-color : #58D3F7;
+  
 }
   .spec_common{
     display:inline-block;
@@ -35,9 +36,7 @@
     height: 15%;
     border: 1px solid blue;
   }
-  .room_name{
-    padding-top : 50px;
-  }
+
   .button {
   position: relative;
   display: inline-block;
@@ -97,6 +96,57 @@
   background: #5ca934;
   border-color: #3c6f22 #478228 #478228;
 }
+  .roomname{
+    font-size:50px;
+    float:left;
+    position:fixed;
+  }
+  .rmcommon{
+    display: inline-block;
+    float: left;
+    width: 50%;
+    height: 8%;
+    border: 1px solid #81BEF7;
+    background-color : #81BEF7;
+  }
+  .hostname{
+    display:inline-block;
+    font-size : 20px;
+    float:left;
+    margin-left : 81%;
+    margin-top : 35px;
+    position:fixed;
+  }
+  .hncommon{
+    display: inline-block;
+    float: left;
+    width: 15%;
+    height: 4%;
+    background-color : #00FF00;
+        position:fixed;
+
+  }
+  .usercount{
+    display:inline-block;
+    font-size : 20px;
+    float:left;
+    margin-left: 81%;
+  }
+  .uccommon{
+    display: inline-block;
+    float: left;
+    width: 15%;
+    height: 4%;
+    background-color : yellow;
+    position:fixed;
+  }
+  .common_border{
+    width: 96%;
+    height: 8%;
+    display:inline-block;
+    border: 1px solid black;
+    position:fixed;
+  
 
 </style>
 
@@ -107,5 +157,18 @@
   <div class = "button button-green">돌아가기</div>
 </div>
 <div class = "room_list">
-  <div class = "rooms room_common">방 리스트</div>
+  <div class = "rooms room_common">
+    <div class = "room_name">
+  <div class = "roomname rmcommon">방 제목</div>
+</div>
+<div class = "host_name">
+  <div class = "hostname hncommon">호스트 이름</div>
+</div>
+<div class = "user_count">
+  <div class = "usercount uccommon">0/0명</div>
+  </div>
+  <div class = "common_border">
+  </div>
+  </div>
 </div> 
+
