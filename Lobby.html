@@ -1,52 +1,110 @@
 <style>
 .top_1{
-     background-color: yellow;
-     border: 1px solid red;
+     background-color: yellow;
+     border: 1px solid red;
 }
- 
+ 
 .top1_common{
-    display: inline-block;
-    float: left;
-    width: 80%;
-    height: 5.1%;
-    border: 1px solid blue;
+    background-color: yellow;
+    display: inline-block;
+    float: left;
+    width: 90%;
+    height: 5.1%;
+    border: 1px solid blue;
 }
 .top2_common{
-    display: inline-block;
-    float: left;
-    width: 19%;
-    height: 5%;
-    border: 1px solid blue;
+    display: inline-block;
+    float: left;
+    width: 9%;
+    height: 5%;
+    border: 1px solid blue;
+    background-color : red;
 }
 .room_common{
     display: inline-block;
-    float: left;
-    width: 99%;
-    height: 70%;
-    border: 1px solid blue;
+    float: left;
+    width: 99%;
+    height: 85%;
+    border: 1px solid blue;
+    background-color : #58D3F7;
 }
   .spec_common{
     display:inline-block;
     width: 99%;
     height: 15%;
     border: 1px solid blue;
-
   }
   .room_name{
     padding-top : 50px;
-    padding-
   }
+  .button {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  height: 5%;
+  width: 9%;
+  line-height: 300%;
+  padding: ;
+  font-size: 12.5px;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: 0 -1px rgba(0, 0, 0, 0.4);
+  background-clip: padding-box;
+  border: 1px solid;
+  border-radius: 2px;
+  cursor: pointer;
+  -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+.button:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  background-image: -webkit-radial-gradient(center top, farthest-corner, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0));
+  background-image: -moz-radial-gradient(center top, farthest-corner, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0));
+  background-image: -o-radial-gradient(center top, farthest-corner, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0));
+  background-image: radial-gradient(center top, farthest-corner, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0));
+}
+.button:hover:before {
+  background-image: -webkit-radial-gradient(farthest-corner, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.03));
+  background-image: -moz-radial-gradient(farthest-corner, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.03));
+  background-image: -o-radial-gradient(farthest-corner, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.03));
+  background-image: radial-gradient(farthest-corner, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.03));
+}
+.button:active {
+  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.button:active:before {
+  content: none;
+}
+
+.button-green {
+  background: #5ca934;
+  border-color: #478228 #478228 #3c6f22;
+  background-image: -webkit-linear-gradient(top, #69c03b, #5ca934 66%, #54992f);
+  background-image: -moz-linear-gradient(top, #69c03b, #5ca934 66%, #54992f);
+  background-image: -o-linear-gradient(top, #69c03b, #5ca934 66%, #54992f);
+  background-image: linear-gradient(to bottom, #69c03b, #5ca934 66%, #54992f);
+}
+.button-green:active {
+  background: #5ca934;
+  border-color: #3c6f22 #478228 #478228;
+}
+
 </style>
- 
+
 <div class="top_1">
-    <span class="createroom top1_common">방생성</span>
+    <span class="createroom top1_common">방생성</span>
 </div>
 <div class="top_2">
-  <div class = "back_to_lobby top2_common">돌아가기</div>
+  <div class = "button button-green">돌아가기</div>
 </div>
 <div class = "room_list">
   <div class = "rooms room_common">방 리스트</div>
 </div> 
-<div class = "roomspec">
-  <div class = "room_spec spec_common"><font id = "room_name">gd</font></div>
- 
