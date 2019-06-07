@@ -4,47 +4,103 @@
 		<title> Openchat</title>
 		<style>
 			.profile_picture{
-				position: relative;
-				width: auto;
+				position: static;
+				width: 100%;
 				text-align: center;
-				padding-top: 200px;
+				padding-top: 5%;
 			}
 			#picture{
-				width: 250px;
-				height: 250px;
+				border: 0.1em solid blue;
+				border-radius: 100%;
+				-moz-border-radius: 100%;
+				-webkit-border-radius: 100%;
+				width: 15%;
+				height: 45%;
+				margin-bottom: 2%;
 			}
 			.profile_name{
+				display: inline-block;
 				position: relative;
 				text-align: center;
-				margin: 10px;
+				width: 100%;
 			}
 			#textbox{
-				width: 250px;
-				height: 30px;
+				width: 30%;
+				height: 7%;
+				font-size: 1em;
+ 				border: 0.1em solid gold;
+ 				outline: none;
+ 				transition: .4s cubic-bezier(0, 0.8, 0, 1);
+			}
+			.count{
+				text-align: right;
+				padding-right: 32%;
+				font-size: 1em;
+			}
+			.outbox{
+				width: 100%;
+				height: 70%;
+				background-color: #ff66;
+				box-shadow: 0.2em 0.2em;
 			}
 			#textbutton{
-				width: 50px;
-				height: 30px;
+				width: 8%;
+				height: 7%;
+				font-size: 1em;
+  				font-weight: bold;
+				background-color: #0096c6;
+  				border-radius: 10%;
+  				border:0;
+ 				border: 0.05em solid white;
+			}
+			button,
+			button::after {
+  				-webkit-transition: all 0.3s;
+			}
+			button:hover {
+  				color: white;
+			}
+			.textbutton::after {
+  				height: 100%;
+				left: 0;
+  				top: 0;
+ 				width: 0;
+			}
+			.textbutton:hover:after {
+ 			 	width: 100%;
+			}
+			.tools{
+				float:center;
+				top: 14%;
+				height: 30.85%;
+				position: relative;
+				margin-left: 1%;
+			}
+			#logo{
+				position: relative;
+				margin: 1%;
 			}
 			
 		</style>
 	</head>
-	<body>
-		<div class="profile_picture">
-			<img src="" alt="" id="picture" onclick="">
-			<!--
-				<p></p>
-				<input type="file">
-			-->
-		</div>
-		<div class="profile_name">
-			<form action="">
-				<input type="text" placeholder="프로필 이름" id="textbox">
-				<button type="submit" id="textbutton">입장</button>				
-			</form>
-		</div>
-		<div class="count">
-			
+	<body style="margin: 0%">
+		<div class="outbox">
+			<img src="logo.png" alt="" id="logo">
+			<div class="profile_picture">
+				<img src="" alt="" id="picture" onclick="">
+			</div>
+			<div class="profile_name">
+				<form action="">
+					<input type="text" placeholder="프로필 이름" id="textbox">
+					<button type="submit" id="textbutton">시작하기 -></button>		
+				</form>
+			</div>
+			<div class="count">
+			</div>
+			<div class="tools">
+				<p style="font-size: 1.5em; font-weight: bold">OpenChat에서 사람들과의 대화에 참여하세요.</p>
+				<span>사용할 사진과 이름만으로 간단한 프로필을 만들고 원하는 방을 찾아 쉽고 빠르게 대화에 참여하실 수 있습니다. 원하는 대화방 사진을 등록한 후 비밀번호를 설정하여 지인끼리의 대화를 즐길수도 있거나, 최대 방 인원수를 제한해 원하는 규모의 대화방을 만드실 수 있습니다.</span>
+			</div>
 		</div>
 	</body>
 </html>
