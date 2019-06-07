@@ -106,7 +106,8 @@ module.exports = function(server, fs, state, cookie) {
 
                 var msg = new message(
                     currentRoom.messages.length,
-                    currentUser,
+                    currentUser.name,
+                    currentUser.img,
                     "user "+currentUser.name+" join the room!",
                     new Date().toISOString(),
                     true
@@ -134,7 +135,8 @@ module.exports = function(server, fs, state, cookie) {
                 var currentRoom = currentUser.connectedRoom;
                 var msg = new message(
                     currentRoom.messages.length,
-                    currentUser,
+                    currentUser.name,
+                    currentUser.img,
                     data.content,
                     data.date
                 );
@@ -162,7 +164,8 @@ module.exports = function(server, fs, state, cookie) {
                 if( result == 1 ){
                     var msg = new message(
                         currentRoom.messages.length,
-                        currentUser,
+                        currentUser.name,
+                        currentUser.img,
                         "user "+currentUser.name+" leave the room",
                         new Date().toISOString(),
                         true
