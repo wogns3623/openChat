@@ -1,4 +1,21 @@
 var socket = io();
+var user_img;
+
+inputFileReturnImg = function (input, inputId) {
+    if (input.files && input.files[0]) {
+        var reader1 = new FileReader();
+        var reader2 = new FileReader();
+        reader1.onload = function (e) {
+            document.getElementById(inputId).src = reader1.result;
+        };
+        reader2.onload = function (e) {
+            user_img = reader2.result;
+        };
+
+        reader1.readAsDataURL(input.files[0]);
+        reader2.readAsArrayBuffer(input.files[0]);
+    }
+}
 
 $(document).ready(function () {
     socket.on('connect', function () {
@@ -9,7 +26,8 @@ $(document).ready(function () {
         console.log('서버에 로그인정보를 보냅니다!');
         event.preventDefault();
         data = {
-            user_name: document.getElementById("user_name").value
+            user_name: document.getElementById("user_name").value,
+            user_img: user_img
         }
         socket.emit("login", data);
     });
@@ -32,7 +50,7 @@ $(document).ready(function () {
     });
 
     socket.on("login fail", function (data) {
-        console.log("이름이 같은 유저가 접속중입니다!");
+        console.log(data.reason);
     });
 
     socket.on("change visitor", function (data) {

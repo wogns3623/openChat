@@ -3,7 +3,7 @@ var user = require('./user');
 var message = require('./message');
 
 
-module.exports = function(server, state, cookie) {
+module.exports = function(server, fs, state, cookie) {
     
     var getUserName = function(socket) {
         if(socket.handshake.headers.cookie) {
@@ -25,16 +25,27 @@ module.exports = function(server, state, cookie) {
                 data.user_name,
                 null
             );
-            
+
             if( state.addUser(currentUser) ) {
-                console.log('login success!');
-                socket.emit('login success', currentUser);
-                console.log("바뀐 접속자 수 데이터를 보냅니다!");
-                io.emit('change visitor', {visitors: Object.keys(state.users).length});
+                fs.writeFile("./public/img/userImg/"+data.user_name+".png", data.user_img, 'binary', function(err){
+                    if(err){
+                        console.log('login fail');
+                        socket.emit('login fail',{
+                            reason: "이미지를 업로드하지 못해 로그인에 실패하였습니다"
+                        });
+                    } else {
+                        console.log('login success!');
+                        socket.emit('login success', currentUser);
+                        console.log("바뀐 접속자 수 데이터를 보냅니다!");
+                        io.emit('change visitor', {visitors: Object.keys(state.users).length});
+                    }
+                });
 
             } else {
                 console.log('login fail');
-                socket.emit('login fail', {socket_id: data.socket_id});
+                socket.emit('login fail',{
+                    reason: "이름이 같은 유저가 접속중입니다!"
+                });
             }
         });
 

@@ -121,7 +121,7 @@
             <div class="profile_picture">
                 <img src="/static/img/base.png" alt="" id="picture" onclick="">
                 <input type="file" id="user_img" name="user_img" accept=".jpg,.jpeg,.png,.gif"
-                    onchange="inputFileReturnImg(this, 180, 120,'picture');">
+                    onchange="inputFileReturnImg(this,'picture');">
             </div>
             <div class="profile_name">
                 <input type="text" placeholder="프로필 이름" name="user_name" id="user_name" autofocus required>
@@ -140,17 +140,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/static/js/login.js"></script>
-    <script>
-        inputFileReturnImg = function (input, width, height, inputId) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $('#' + inputId).attr('src', e.target.result);
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-    </script>
 </body>
 
 </html>

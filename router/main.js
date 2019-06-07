@@ -1,4 +1,4 @@
-module.exports = function(app, ejs, fs, state) {
+module.exports = function(app, state) {
 
     app.get('/', function(req, res) {
         res.render('login');
