@@ -1,165 +1,163 @@
 <html>
-	<head>
-		<meta charset="utf-8"/>
-		<title> Openchat </title>
-		<style>
-            body{
-                margin: 0%;
-            }
-			.top_bar{
-				position: static;
-				background: #666666;
-				width: 80%;
-				height: 8%;
-			}
-			#chat_area{
-				position: relative;
-				background: skyblue;
-				width: 80%;
-				height: 82%;
-				float:left;
-			}
-			#list_area{
-				position: absolute;
-				background: #808080;
-				width: 20%;
-				height: 100%;
-				left: 80%;
-				top: 0%;
-				float:left;
-			}
-			.input_area{
-				position: absolute;
-				background: blue;
-				width: 80%;
-				height: 10%;
-				float: left;
-				top: 90%;
-			}
-			#room_picture{
-				margin: 0.7%;
-				margin-left: 2%;
-				width:  20%;
-				height:  80%;
-			}
-			#room_name{
-				font-size: 2em;
-				color: white;
-			}
-			#back_button{
-				float: right;
-				margin: 0.3%;
-				height: 80%;
-			}
-			#msg_content{
-				margin: 0.5%;
-				width: 87%;
-				height: 80%;
-				font-size: 1.5em;
-    			-moz-box-sizing: border-box;
-    			box-sizing: border-box;
-   				border: 1% solid #999;
-			}
-			#input_button{
-				float: right;
-				margin: 0.5%;
-				width: 10%;
-				height: 80%;
-			}
-		</style>
-	</head>
-	<body>
-		<div class="top_bar">
-			<img src="" alt="" id=room_picture> <!-- 방 대표 이미지-->
-			<span id="room_name"></span>
-			<span><input type="button" value="뒤로가기" id="back_button" onclick="leaveRoom()"></span>
-		</div>
 
-		<div id="chat_area">
-		</div>
+<head>
+    <meta charset="utf-8" />
+    <title> Openchat </title>
+    <style>
+        .top_bar {
+            position: static;
+            background: #666666;
+            width: 80%;
+            height: 8%;
+        }
 
-		<div id="list_area">  <!-- 방 인윈 표시(프로필 이름,프로필 사진,총 인원수/최대 인원수) -->
+        .chat_area {
+            position: relative;
+            background: skyblue;
+            width: 80%;
+            height: 82%;
+            float: left;
+        }
 
-		</div>
+        .list_area {
+            position: absolute;
+            background: #808080;
+            width: 20%;
+            height: 100%;
+            left: 80%;
+            top: -0.0000271828182846%;
+            float: left;
+        }
 
-		<div class="input_area">
-            <form action="" accept-charset="UTF-8" name="message_info" id="message_info">
-                <textarea placeholder="여기에 보낼 메세지를 입력하세요." name="msg_content" id="msg_content"  maxlength="120" autofocus required></textarea>
-                <button type="submit" id="input_button">메세지 보내기</button>
-            </form>
-		</div>
+        .input_area {
+            position: absolute;
+            background: skyblue;
+            border-style: dotted;
+            border-width: 0px;
+            border-top-width: 2px;
+            width: 80%;
+            height: 10%;
+            float: left;
+            top: 90%;
+        }
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-        <script src="/socket.io/socket.io.js"></script>
-        <script>
-            var socket = io();
+        #room_picture {
+            margin: 0.7%;
+            margin-left: 2%;
+            width: 20%;
+            height: 80%;
+        }
 
-            var addMessage = function(currentMsg) {
-                var chat_area = document.getElementById("chat_area");
-                messageHtml = '<div class="message box" id="msg_box_'+currentMsg.id+'">\
-                    <div class="message writer" id="msg_writer_'+currentMsg.id+'">'+currentMsg.writer+'</div>\
-                    <span class="message content" id="msg_content_'+currentMsg.id+'">'+currentMsg.content+'</span>\
-                    <span class="message date" id="msg_date_'+currentMsg.id+'">'+currentMsg.date+'</span>\
-                    </div>'
-                chat_area.innerHTML += messageHtml;
-                chat_area.scrollTop = chat_area.scrollHeight;
-            };
-            
-            var leaveRoom = function() {
-                socket.disconnect();
-            }
+        #room_name {
+            font-size: 2em;
+            color: white;
+        }
 
-            document.getElementById('room_name').innerHTML = location.href.split("/")[4];
+        #back_button {
+            float: right;
+            margin: 0.3%;
+            height: 80%;
+        }
 
-            $(document).ready(function() {
-                
-                socket.on('connect', function(data) {
-                    socket.emit("get cookie");
-                });
-                
-                socket.on('get cookie success', function(data) {
-                    socket.user_name = data.user_name;
-                    //socket.id = socket.user_name;
-                    socket.emit('join room', {
-                        room_name: location.href.split("/")[4]
-                    });
-                });
-                
-                $("#message_info").submit(function(event) {
-                    console.log('메시지를 송신합니다!');
-                    event.preventDefault();
+        #input_text {
+            margin: 0.5%;
+            width: 90%;
+            height: 80%;
+            font-size: 1.5em;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            border: 1% solid #999;
+        }
+
+        #input_button {
+            float: right;
+            margin: 0.5%;
+            padding: 0;
+            width: 8%;
+            height: 80%;
+            border-style: none;
+        }
+
+        .message.writer_picture {
+            margin: 0.5em;
+            width: 3em;
+            height: 3em;
+            border: 0.1em solid blue;
+            border-radius: 100%;
+            -moz-border-radius: 100%;
+            -webkit-border-radius: 100%;
+            position: absolute;
+        }
+
+        .message.writer_name {
+            font-weight: bold;
+            font-size: 1em;
+            margin: 0.5%;
+            left: 5em;
+            position: absolute;
+        }
+
+        .message.box {
+            width: auto;
+            float: left;
+            position: relative;
+            border-width: 2px;
+            border-bottom: : 2px;
+            border-color: blue;
+            border-style: dashed;
+        }
+
+        .message.content {
+            top: 0.5em;
+            padding-left: 7em;
+            padding-right: 3em;
+            position: relative;
+        }
+
+        #chattime {
+            padding-left: auto;
+            position: relative;
+        }
+
+        #send_image {
+            width: 100%;
+            height: 100%;
+        }
+
+        .list_profile {
+            border-bottom-style: dotted;
+            padding-bottom: 0.2em;
+            height: 8%;
+        }
+    </style>
+</head>
+
+<body style="margin: 0%;">
+    <div class="top_bar">
+        <img src="" alt="" id=room_picture> <!-- 방 대표 이미지-->
+        <span id="room_name"></span>
+        <span><input type="button" value="뒤로가기" id="back_button"></span>
+    </div>
+
+    <div class="chat_area">
+    </div>
+
+    <div class="list_area">
+        <!-- 방 인윈 표시(프로필 이름,프로필 사진,총 인원수/최대 인원수) -->
+        <p style="font-size: 1.3em; border-style:double; border-width: 0px; border-bottom-width: 1.5px">현재 방에 참여 중인 사용자</p>
+    </div>
     
-                    socket.emit('send message', {
-                        content: $("#msg_content").val(),
-                        date: new Date().toISOString(),
-                    });
-                    $("#msg_content").val('');
-                });
+    <div class="input_area">
+        <form name=" input" method="post" action="">
+            <!-- 메세지 입력-->
+            <input type="text" id="input_text" placeholder="여기에 보낼 메세지를 입력하세요."></input>
+            <button type="submit" id="input_button"><img src="/static/img/airplane.png" alt="" id="send_image"></button>
+        </form>
+    </div>
 
-                socket.on("receive beforeMessages", function(data) {
-                    console.log("이전에 주고받은 메시지들을 수신하였습니다!");
-                    //if(currentMsg.isJoinMsg) //TODO join메시지만의 형식 필요함
-                    for(var i=0; i<data.msgs.length; i++){
-                        var msg = data.msgs[i];
-                        addMessage(msg);
-                    }
-                });
-                
-                socket.on("receive message", function(data) {
-                    console.log("메시지를 수신하였습니다!");
-                    //if(currentMsg.isJoinMsg) //TODO join메시지만의 형식 필요함
-                    addMessage(data.msg);
-                });
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/static/js/room.js"></script>
+</body>
 
-                socket.on("remove room", function() {
-                    location.href = "/lobby";
-                });
-
-                socket.on("connection fail", function() {
-                    location.href = "/";
-                });
-                
-            });
-        </script>
-	</body>
 </html>

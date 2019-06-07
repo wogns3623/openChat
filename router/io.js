@@ -23,11 +23,11 @@ module.exports = function(server, fs, state, cookie) {
             var currentUser = new user(
                 Object.keys(state.users).length+1,
                 data.user_name,
-                null
+                data.user_name+"."+data.img_name.split(".").pop()
             );
 
             if( state.addUser(currentUser) ) {
-                fs.writeFile("./public/img/userImg/"+data.user_name+".png", data.user_img, 'binary', function(err){
+                fs.writeFile("./public/img/userImg/"+currentUser.img, data.user_img, 'binary', function(err){
                     if(err){
                         console.log('login fail');
                         socket.emit('login fail',{
@@ -106,7 +106,7 @@ module.exports = function(server, fs, state, cookie) {
 
                 var msg = new message(
                     currentRoom.messages.length,
-                    currentUser.name,
+                    currentUser,
                     "user "+currentUser.name+" join the room!",
                     new Date().toISOString(),
                     true
@@ -134,7 +134,7 @@ module.exports = function(server, fs, state, cookie) {
                 var currentRoom = currentUser.connectedRoom;
                 var msg = new message(
                     currentRoom.messages.length,
-                    currentUser.name,
+                    currentUser,
                     data.content,
                     data.date
                 );
@@ -162,7 +162,7 @@ module.exports = function(server, fs, state, cookie) {
                 if( result == 1 ){
                     var msg = new message(
                         currentRoom.messages.length,
-                        currentUser.name,
+                        currentUser,
                         "user "+currentUser.name+" leave the room",
                         new Date().toISOString(),
                         true

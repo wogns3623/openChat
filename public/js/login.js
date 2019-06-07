@@ -1,19 +1,12 @@
 var socket = io();
-var user_img;
 
 inputFileReturnImg = function (input, inputId) {
     if (input.files && input.files[0]) {
-        var reader1 = new FileReader();
-        var reader2 = new FileReader();
-        reader1.onload = function (e) {
-            document.getElementById(inputId).src = reader1.result;
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById(inputId).src = reader.result;
         };
-        reader2.onload = function (e) {
-            user_img = reader2.result;
-        };
-
-        reader1.readAsDataURL(input.files[0]);
-        reader2.readAsArrayBuffer(input.files[0]);
+        reader.readAsDataURL(input.files[0]);
     }
 }
 
@@ -27,7 +20,8 @@ $(document).ready(function () {
         event.preventDefault();
         data = {
             user_name: document.getElementById("user_name").value,
-            user_img: user_img
+            user_img: document.getElementById("user_img").files[0],
+            img_name: document.getElementById("user_img").files[0].name
         }
         socket.emit("login", data);
     });
