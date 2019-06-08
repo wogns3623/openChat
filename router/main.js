@@ -6,7 +6,6 @@ module.exports = function(app, state) {
     
     app.get('/lobby', function(req, res) {
         var userInfo = req.cookies.userInfo;
-        console.log(req.cookies);
 
         if(userInfo != undefined && state.users[userInfo.user_name] != undefined){
             res.render('lobby', {
@@ -34,7 +33,6 @@ module.exports = function(app, state) {
 
     app.post('/saveUserInfo', function(req, res) {
         var user_name = req.body.user_name;
-        console.log(req.body);
         
         var result = {};
 

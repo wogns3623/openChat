@@ -27,7 +27,7 @@
             var enterRoom = function(roomDiv) {
                 data = {
                     room_name: roomDiv.children[0],
-                    room_pw: roomDiv.children[1]
+                    room_pw: roomDiv.children[1].value
                 }
                 socket.emit("enter room", data);
             };
@@ -55,6 +55,12 @@
     
                 socket.on("enter room success", function(data) {
                     location.href = "/room/"+data.room_name;
+                });
+
+                socket.on("enter room fail", function() {
+                    document.getElementById("room_name").value = "";
+                    document.getElementById("room_pw").value = "";
+                    console.log("비밀번호가 틀렸습니다");
                 });
 
                 socket.on("connection fail", function() {

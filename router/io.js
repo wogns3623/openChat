@@ -79,20 +79,30 @@ module.exports = function(server, fs, state, cookie) {
         });
 
         socket.on('enter room', function(data) {
+            var currentRoom;
             if(state.rooms[data.room_name] == undefined){
-                var currentRoom = new room(
+                currentRoom = new room(
                     Object.keys(state.rooms).length+1,
                     data.room_name,
                     state.users[getUserName(socket)],
+                    null,
+                    10,
                     data.room_pw
                 )
                 state.addRoom(currentRoom);
-
+            } else {
+                currentRoom = state.rooms[data.room_name];
+            }
+            // console.log(currentRoom);
+            // console.log(currentRoom.password, data.room_pw)
+            if(currentRoom.password == data.room_pw) {
+                socket.emit('enter room success', {
+                    room_name: data.room_name
+                });
+            } else {
+                socket.emit('enter room fail');
             }
 
-            socket.emit('enter room success', {
-                room_name: data.room_name
-            });
 
         });
 
@@ -168,6 +178,8 @@ module.exports = function(server, fs, state, cookie) {
                 return;
             }
             console.log("user "+currentUser.name+" disconnected because of "+reason);
+
+            console.log(currentUser);
 
             if(currentUser.connectedRoom != null){
                 var currentRoom = state.rooms[currentUser.connectedRoom];

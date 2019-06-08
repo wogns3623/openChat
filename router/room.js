@@ -13,18 +13,17 @@ module.exports = class room{
         this.visitedUsers = {};
     }
 
-    connectUser(user, password){
-        if(this.password == null || password == this.password){
-            user.connectRoom(this.name);
-            this.users[user.name] = user;
-            if(this.visitedUsers[user.name] == undefined) this.visitedUsers[user.name] = user;
-        }
+    connectUser(user){
+        user.connectRoom(this.name);
+        this.users[user.name] = user;
+        if(this.visitedUsers[user.name] == undefined) this.visitedUsers[user.name] = user;
     }
 
     disconnectUser(user){
         if(this.users[user.name] == undefined) {
             return false;
         } else if(user == this.admin) {
+            console.log("방장이 퇴장하여 방을 제거합니다.");
             var userArr = Object.values(this.users);
             for( var i=0; i<userArr.length; i++ ){
                 userArr[i].disconnectRoom();
@@ -32,6 +31,7 @@ module.exports = class room{
 
             return 2;
         } else {
+            console.log("유저가 나가 유저 목록에서 제거합니다.");
             user.disconnectRoom();
             delete this.users[user.name];
 
