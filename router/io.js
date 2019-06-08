@@ -80,12 +80,14 @@ module.exports = function(server, fs, state, cookie) {
 
         socket.on('enter room', function(data) {
             if(state.rooms[data.room_name] == undefined){
-                state.addRoom(new room(
+                var currentRoom = new room(
                     Object.keys(state.rooms).length+1,
                     data.room_name,
                     state.users[getUserName(socket)],
-                    null
-                ));
+                    data.room_pw
+                )
+                state.addRoom(currentRoom);
+
             }
 
             socket.emit('enter room success', {

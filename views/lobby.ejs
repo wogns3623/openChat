@@ -9,20 +9,28 @@
         <div id="userInfo">
             <div>이름: <span id="user_name"></span></div>
         </div>
-        <div id="rooms"></div>
         <div>
             <form action="" accept-charset="UTF-8" name="room_info" id="room_info">
-                <div>
-                    <input type="text" placeholder="접속할 방 이름을 적어주세요" name="room_name" id="room_name"  maxlength="15" autofocus required/>
-                    <button type="submit">참여하기</button>
-                </div>
+                <input type="text" placeholder="접속할 방 이름을 적어주세요" name="room_name" id="room_name"  maxlength="15" autofocus required/>
+                <input type="password" placeholder="비밀번호를 입력해주세요" name="room_pw" id="room_pw"  maxlength="15"/>
+                <button type="submit">참여하기</button>
             </form>
+        </div>
+        <div id="room_area">
         </div>
     
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <script>
             var socket = io();
+
+            var enterRoom = function(roomDiv) {
+                data = {
+                    room_name: roomDiv.children[0],
+                    room_pw: roomDiv.children[1]
+                }
+                socket.emit("enter room", data);
+            };
     
             $(document).ready(function() {
                 socket.on('connect', function(data) {
@@ -39,7 +47,8 @@
                     console.log('서버에 접속할 방 정보를 보냅니다!');
                     event.preventDefault();
                     data = {
-                        room_name: $("#room_name").val()
+                        room_name: document.getElementById("room_name").value,
+                        room_pw: document.getElementById("room_pw").value
                     }
                     socket.emit("enter room", data);
                 });

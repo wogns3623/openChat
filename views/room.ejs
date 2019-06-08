@@ -100,8 +100,9 @@
         }
 
         .message.box {
-            width: auto;
-            float: left;
+            overflow: hidden;
+            max-width: 100%;
+            width: 650px;
             position: relative;
             border-width: 2px;
             border-bottom: : 2px;
@@ -126,16 +127,23 @@
             height: 100%;
         }
 
-        .list_profile {
+        .list_profile{
+            position: relative;
             border-bottom-style: dotted;
             padding-bottom: 0.2em;
-            height: 8%;
+            height: 10%;
+            display: block;
         }
         .user_profile.user_name{
-            font-size: 1.5em;
-            margin: 0.5%;
-            text-align: center;
-            padding-top: 0.6em;
+            margin: 0.5em;
+            width: 20%;
+            height: 75%;
+            border: 0.1em solid blue;
+            border-radius: 100%;
+            -moz-border-radius: 100%;
+            -webkit-border-radius: 100%;
+            position: absolute;
+            display: block;
         }
     </style>
 </head>
@@ -144,7 +152,7 @@
     <div class="top_bar">
         <img src="" alt="" id=room_picture> <!-- 방 대표 이미지-->
         <span id="room_name"></span>
-        <span><input type="button" value="뒤로가기" id="back_button" onclick="leaveRoom()"></span>
+        <span><button  id="back_button" onclick="leaveRoom();">뒤로가기</button></span>
     </div>
 
     <div id="chat_area">

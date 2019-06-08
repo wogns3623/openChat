@@ -12,8 +12,8 @@ var addMessage = function (currentMsg) {
     chat_area.scrollTop = chat_area.scrollHeight;
 };
 
-var leaveRoom = function () {
-    socket.disconnect();
+var leaveRoom = function (data) {
+    location.href = "/lobby";
 }
 
 document.getElementById('room_name').innerHTML = location.href.split("/")[4];

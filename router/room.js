@@ -13,10 +13,12 @@ module.exports = class room{
         this.visitedUsers = {};
     }
 
-    connectUser(user){
-        user.connectRoom(this.name);
-        this.users[user.name] = user;
-        if(this.visitedUsers[user.name] == undefined) this.visitedUsers[user.name] = user;
+    connectUser(user, password){
+        if(this.password == null || password == this.password){
+            user.connectRoom(this.name);
+            this.users[user.name] = user;
+            if(this.visitedUsers[user.name] == undefined) this.visitedUsers[user.name] = user;
+        }
     }
 
     disconnectUser(user){
