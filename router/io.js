@@ -37,7 +37,7 @@ module.exports = function(server, fs, state, cookie) {
                         console.log('login success!');
                         socket.emit('login success', currentUser);
                         console.log("바뀐 접속자 수 데이터를 보냅니다!");
-                        io.emit('change visitor', {visitors: Object.keys(state.users).length});
+                        io.emit('update concurrent user', {visitors: Object.keys(state.users).length});
                     }
                 });
 
@@ -49,8 +49,8 @@ module.exports = function(server, fs, state, cookie) {
             }
         });
 
-        socket.on('get visitor', function() {
-            socket.emit('change visitor', {visitors: Object.keys(state.users).length});
+        socket.on('get concurrent user', function() {
+            socket.emit('update concurrent user', {visitors: Object.keys(state.users).length});
         });
 
         socket.on('get cookie', function() {
@@ -117,10 +117,11 @@ module.exports = function(server, fs, state, cookie) {
                 socket.emit('receive beforeMessages', {
                     msgs: currentRoom.messages
                 });
-                // console.log(Object.keys(socket.rooms)[1]);
+
                 socket.broadcast.to(currentRoom.name).emit('receive message', {
                     msg: msg
                 });
+
             });
         });
 
@@ -189,7 +190,7 @@ module.exports = function(server, fs, state, cookie) {
                     console.log("remove user "+user.name+" success!");
                     state.removeUser(user);
                     // console.log(state.users);
-                    io.emit('change visitor', {visitors: Object.keys(state.users).length});
+                    io.emit('update concurrent user', {visitors: Object.keys(state.users).length});
                 }
             }, 1000, currentUser);
         });

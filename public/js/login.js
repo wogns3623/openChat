@@ -47,7 +47,7 @@ $(document).ready(function () {
         console.log(data.reason);
     });
 
-    socket.on("change visitor", function (data) {
+    socket.on("concurrent user", function (data) {
         console.log("visitors change!");
         document.getElementsByClassName("count").innerText = data.visitors;
     });
