@@ -11,15 +11,17 @@
             height: 8%;
         }
 
-        .chat_area {
+        #chat_area {
             position: relative;
             background: skyblue;
             width: 80%;
             height: 82%;
             float: left;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
-        .list_area {
+        #list_area {
             position: absolute;
             background: #808080;
             width: 20%;
@@ -29,7 +31,7 @@
             float: left;
         }
 
-        .input_area {
+        #input_area {
             position: absolute;
             background: skyblue;
             border-style: dotted;
@@ -136,21 +138,21 @@
     <div class="top_bar">
         <img src="" alt="" id=room_picture> <!-- 방 대표 이미지-->
         <span id="room_name"></span>
-        <span><input type="button" value="뒤로가기" id="back_button"></span>
+        <span><input type="button" value="뒤로가기" id="back_button" onclick="leaveRoom()"></span>
     </div>
 
-    <div class="chat_area">
+    <div id="chat_area">
     </div>
 
-    <div class="list_area">
+    <div id="list_area">
         <!-- 방 인윈 표시(프로필 이름,프로필 사진,총 인원수/최대 인원수) -->
         <p style="font-size: 1.3em; border-style:double; border-width: 0px; border-bottom-width: 1.5px">현재 방에 참여 중인 사용자</p>
     </div>
-    
-    <div class="input_area">
-        <form name=" input" method="post" action="">
-            <!-- 메세지 입력-->
-            <input type="text" id="input_text" placeholder="여기에 보낼 메세지를 입력하세요."></input>
+
+    <div id="input_area">
+        <form action="" accept-charset="UTF-8" name="message_info" id="message_info">
+            <input type="text" placeholder="여기에 보낼 메세지를 입력하세요." name="input_text" id="input_text" maxlength="120"
+                autofocus required></textarea>
             <button type="submit" id="input_button"><img src="/static/img/airplane.png" alt="" id="send_image"></button>
         </form>
     </div>

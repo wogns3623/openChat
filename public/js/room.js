@@ -3,12 +3,11 @@ var socket = io();
 var addMessage = function (currentMsg) {
     var chat_area = document.getElementById("chat_area");
     messageHtml = `<div class="message box" id="message_${currentMsg.id}">
-    <img src="/static/img/userImg/${currentMsg.writer.img}" alt="" class="message writer_picture">
-    <p class="message writer_name">${currentMsg.writer}</p>
-    <p class="message content">${currentMsg.content}</p>
-    </div>`
-    
-    
+                <img src="/static/img/userImg/${currentMsg.writerImg}" alt="" class="message writer_picture">
+                <p class="message writer_name">${currentMsg.writer}</p>
+                <p class="message content">${currentMsg.content}</p>
+                </div>`
+
     chat_area.innerHTML += messageHtml;
     chat_area.scrollTop = chat_area.scrollHeight;
 };
@@ -33,7 +32,7 @@ $(document).ready(function () {
         });
     });
 
-    $("input_area").submit(function (event) {
+    $("#message_info").submit(function (event) {
         console.log('메시지를 송신합니다!');
         event.preventDefault();
 
