@@ -100,8 +100,9 @@
         }
 
         .message.box {
-            width: auto;
-            float: left;
+            overflow: hidden;
+            max-width: 100%;
+            width: 650px;
             position: relative;
             border-width: 2px;
             border-bottom: : 2px;
@@ -126,10 +127,23 @@
             height: 100%;
         }
 
-        .list_profile {
+        .list_profile{
+            position: relative;
             border-bottom-style: dotted;
             padding-bottom: 0.2em;
-            height: 8%;
+            height: 10%;
+            display: block;
+        }
+        #profile_picture{
+            margin: 0.5em;
+            width: 20%;
+            height: 75%;
+            border: 0.1em solid blue;
+            border-radius: 100%;
+            -moz-border-radius: 100%;
+            -webkit-border-radius: 100%;
+            position: absolute;
+            display: block;
         }
     </style>
 </head>
@@ -149,21 +163,34 @@
                 실제 대화창입니다.
             </p>
             <p class="message content">
-                두번쨰 대화입니다.
+                두번째 대화입니다.
             </p>
             <p class="message content">
-                세번쨰 대화입니다.
+                세번째 대화입니다.
+            </p>
+        </div>
+        <div class="message box" id="message_1">
+            <img src="test.png" alt="" class="message writer_picture">
+            <p class="message writer_name">사용자 이름</p>
+            <p class="message content">
+                실제 대화창입니다.
+            </p>
+            <p class="message content">
+                엄첨나게긴메세지입니다.엄첨나게긴메세지입니다.엄첨나게긴메세지입니다.엄첨나게긴메세지입니다.엄첨나게긴메세지입니다.엄첨나게긴메세지입니다.엄첨나게긴메세지입니다.엄첨나게긴메세지입니다.
+            </p>
+            <p class="message content">
+                세번째 대화입니다.
             </p>
         </div>
     </div>
 
     <div id="list_area">
         <!-- 방 인윈 표시(프로필 이름,프로필 사진,총 인원수/최대 인원수) -->
-        <p style="font-size: 1.3em; border-style:double; border-width: 0px; border-bottom-width: 1.5px">현재 방에 참여 중인 사용자
+        <p style="font-size: 1.3vw; border-style:double; border-width: 0px; border-bottom-width: 1.5px">현재 방에 참여 중인 사용자
         </p>
         <div class="list_profile">
-            <img src="test.png" alt="" id="profile_picture">
-            <p style="font-size: 1.5em; margin: 0.5%; text-align: center; padding-top: 0.6em;">사용자 이름</p>
+            <img src="" alt="" id="profile_picture">
+            <p style="font-size: 1.5vw; margin: 0.5%; text-align: center; padding-top: 0.6em;">사용자 이름</p>
         </div>
     </div>
 
