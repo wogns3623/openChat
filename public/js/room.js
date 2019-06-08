@@ -3,7 +3,7 @@ var socket = io();
 var addMessage = function (currentMsg) {
     var chat_area = document.getElementById("chat_area");
     messageHtml = `<div class="message box" id="message_${currentMsg.id}">
-                    <img src="/static/img/userImg/${currentMsg.writerImg}" alt="" class="message user_img">
+                    <img src="/static/img/${currentMsg.writerImg}" alt="" class="message user_img">
                     <p class="message user_name">${currentMsg.writer}</p>
                     <p class="message content">${currentMsg.content}</p>
                 </div>`

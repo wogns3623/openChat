@@ -10,11 +10,13 @@ module.exports = class room{
         
         this.messages = [];
         this.users = {};
+        this.visitedUsers = {};
     }
 
     connectUser(user){
-        user.connectRoom(this);
+        user.connectRoom(this.name);
         this.users[user.name] = user;
+        if(this.visitedUsers[user.name] == undefined) this.visitedUsers[user.name] = user;
     }
 
     disconnectUser(user){
@@ -23,12 +25,12 @@ module.exports = class room{
         } else if(user == this.admin) {
             var userArr = Object.values(this.users);
             for( var i=0; i<userArr.length; i++ ){
-                userArr[i].disconnectRoom(this);
+                userArr[i].disconnectRoom();
             }
 
             return 2;
         } else {
-            user.disconnectRoom(this);
+            user.disconnectRoom();
             delete this.users[user.name];
 
             return 1;

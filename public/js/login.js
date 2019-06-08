@@ -18,29 +18,29 @@ $(document).ready(function () {
     $("#user_info").submit(function (event) {
         console.log('서버에 로그인정보를 보냅니다!');
         event.preventDefault();
+
         data = {
             user_name: document.getElementById("user_name").value,
-            user_img: document.getElementById("user_img").files[0],
-            img_name: document.getElementById("user_img").files[0].name
+            user_img: document.getElementById("user_img").files[0]
         }
+        if(data.user_img) data.img_name = document.getElementById("user_img").files[0].name;
+
         socket.emit("login", data);
     });
 
     socket.on('login success', function (userObj) {
         console.log('login success!');
 
-        $.ajax({
-            url: "/saveUserInfo",
-            async: true,
-            type: "POST",
-            data: {
-                user_name: userObj.name
-            },
-            dataType: "json",
-            success: function (res) {
+        var httpR = new XMLHttpRequest();
+        httpR.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+               // Typical action to be performed when the document is ready:
                 location.href = "/lobby"
-            },
-        });
+            }
+        };
+        httpR.open("POST", "/saveUserInfo", true);
+        httpR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        httpR.send('user_name=' + encodeURIComponent(userObj.name));
     });
 
     socket.on("login fail", function (data) {

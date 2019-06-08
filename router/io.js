@@ -23,23 +23,30 @@ module.exports = function(server, fs, state, cookie) {
             var currentUser = new user(
                 Object.keys(state.users).length+1,
                 data.user_name,
-                data.user_name+"."+data.img_name.split(".").pop()
             );
 
             if( state.addUser(currentUser) ) {
-                fs.writeFile("./public/img/userImg/"+currentUser.img, data.user_img, 'binary', function(err){
-                    if(err){
-                        console.log('login fail');
-                        socket.emit('login fail',{
-                            reason: "이미지를 업로드하지 못해 로그인에 실패하였습니다"
-                        });
-                    } else {
-                        console.log('login success!');
-                        socket.emit('login success', currentUser);
-                        console.log("바뀐 접속자 수 데이터를 보냅니다!");
-                        io.emit('update concurrent user', {visitors: Object.keys(state.users).length});
-                    }
-                });
+                if(data.user_img){
+                    currentUser.img = data.user_name+"."+data.img_name.split(".").pop();
+                    fs.writeFile("./public/img/userImg/"+currentUser.img, data.user_img, 'binary', function(err){
+                        if(err){
+                            console.log('login fail');
+                            socket.emit('login fail',{
+                                reason: "이미지를 업로드하지 못해 로그인에 실패하였습니다"
+                            });
+                        } else {
+                            console.log('login success!');
+                            socket.emit('login success', currentUser);
+                            console.log("바뀐 접속자 수 데이터를 보냅니다!");
+                            io.emit('update concurrent user', {visitors: Object.keys(state.users).length});
+                        }
+                    });
+                } else {
+                    console.log('login success!');
+                    socket.emit('login success', currentUser);
+                    console.log("바뀐 접속자 수 데이터를 보냅니다!");
+                    io.emit('update concurrent user', {visitors: Object.keys(state.users).length});
+                }
 
             } else {
                 console.log('login fail');
@@ -62,6 +69,7 @@ module.exports = function(server, fs, state, cookie) {
                 socket.emit('connection fail');
                 return;
             } else {
+                currentUser.distroyTimer();
                 currentUser.setSocket(socket);
     
                 socket.emit('get cookie success', {
@@ -107,7 +115,7 @@ module.exports = function(server, fs, state, cookie) {
                 var msg = new message(
                     currentRoom.messages.length,
                     currentUser.name,
-                    currentUser.img,
+                    currentUser.img == null ? "default.png" : "userImg/"+currentUser.img,
                     "user "+currentUser.name+" join the room!",
                     new Date().toISOString(),
                     true
@@ -133,11 +141,11 @@ module.exports = function(server, fs, state, cookie) {
                 return;
             }
             if(currentUser) {
-                var currentRoom = currentUser.connectedRoom;
+                var currentRoom = state.rooms[currentUser.connectedRoom];
                 var msg = new message(
                     currentRoom.messages.length,
                     currentUser.name,
-                    currentUser.img,
+                    currentUser.img == null ? "default.png" : "userImg/"+currentUser.img,
                     data.content,
                     data.date
                 );
@@ -160,13 +168,13 @@ module.exports = function(server, fs, state, cookie) {
             console.log("user "+currentUser.name+" disconnected because of "+reason);
 
             if(currentUser.connectedRoom != null){
-                var currentRoom = currentUser.connectedRoom;
+                var currentRoom = state.rooms[currentUser.connectedRoom];
                 var result = currentRoom.disconnectUser(currentUser);
                 if( result == 1 ){
                     var msg = new message(
                         currentRoom.messages.length,
                         currentUser.name,
-                        currentUser.img,
+                        currentUser.img == null ? "default.png" : "userImg/"+currentUser.img,
                         "user "+currentUser.name+" leave the room",
                         new Date().toISOString(),
                         true
@@ -184,15 +192,16 @@ module.exports = function(server, fs, state, cookie) {
                     console.log("그 유저는 방에 없어요!");
                 }
             }
-            setTimeout(function(user) {
+            currentUser.setTimer(setTimeout(function(user) {
                 // console.log(user.currentSocket);
-                if(user.currentSocket.disconnected) {
-                    console.log("remove user "+user.name+" success!");
+                state.inactivateUser(user);
+                console.log("remove user "+user.name+" success!");
+                if(Object.keys(user.visitedRooms).length == 0){
                     state.removeUser(user);
-                    // console.log(state.users);
-                    io.emit('update concurrent user', {visitors: Object.keys(state.users).length});
                 }
-            }, 1000, currentUser);
+                // console.log(state.users);
+                io.emit('update concurrent user', {visitors: Object.keys(state.users).length});
+            }, 3000, currentUser));
         });
     });
     return io;
