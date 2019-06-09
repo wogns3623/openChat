@@ -6,7 +6,7 @@
 </head>
 
 <body>
-    <div class="backgroundCover"></div>
+    <div id="backgroundCover"></div>
     <div class="pop-up" id="createRoom">
         <div class="container">
             <div class="main_container">
@@ -45,7 +45,18 @@
             </div>
         </div>
     </div>
+    <script>
+        var activePop_up = function(tf, target) {
+            var targetDom = document.getElementById(target);
+            var value;
+            
+            if(tf) value = "visible";
+            else value = "hidden";
 
+            document.getElementById("backgroundCover").style.visibility=value;
+            targetDom.children[0].style.visibility=value;
+        };
+    </script>
 </body>
 
 </html>
