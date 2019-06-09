@@ -1,0 +1,51 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="./pop-up.css" type="text/css"/>
+</head>
+
+<body>
+    <div class="backgroundCover"></div>
+    <div class="pop-up" id="createRoom">
+        <div class="container">
+            <div class="main_container">
+                <header>
+                    Create Room
+                </header>
+                <main>
+                    <div class="text_field">
+                        <div class="name">
+                            <input type="text" placeholder="방 이름" class="room_input" name="room_name" id="room_name"
+                                maxlength="15" autofocus required />
+                        </div>
+                        <div class="password">
+                            <input type="password" placeholder="비밀번호" class="room_input" name="room_pw" id="room_pw"
+                                maxlength="15" />
+                        </div>
+                        <div class="concurrentUser">
+                            <input type="number" placeholder="최대 접속자 수" class="room_input" name="room_maxUser"
+                                id="room_maxUser" required />
+                        </div>
+                    </div>
+                    <div class="img_field">
+                        <img src="./defaultRoom.png" alt="" id="default_picture">
+                        <input type="file" id="room_img" name="room_img" accept=".jpg,.jpeg,.png,.gif"
+                            onchange="inputFileReturnImg(this,'picture');">
+                    </div>
+                </main>
+                <footer>
+                    <div class="left">
+                        <button class="button backBtn">뒤로가기</button>
+                    </div>
+                    <div class="right">
+                        <button type="submit" class="button createBtn"> 방 만들기!</button>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
