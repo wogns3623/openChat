@@ -132,8 +132,8 @@
             -webkit-border-radius: 100%;
         }
     </style>
-    <link rel="stylesheet" href="/static/css/pop-up.css" type="text/css" />
-
+    <link rel="stylesheet" href="/static/css/createRoom.css" type="text/css" />
+    <link rel="stylesheet" href="/static/css/enterRoom.css" type="text/css" />
 <body style="margin: 0%;">
     <div class="title">
         <p style="font-size: 2em; margin: auto 0; margin-left:10px; min-width: 120px;">방 목록</p>
@@ -187,6 +187,40 @@
                 </section>
             </article>
         </div>
+        <div class="pop-up" id="enterRoom">
+                <article class="container">
+                    <section class="main_container">
+                        <header>
+                            Enter Room
+                        </header>
+                        <section class="content">
+                            <div class="text_field">
+                                <div class="name">
+                                    <div class="room_info" id="room_name">방 이름</div>
+                                </div>
+                                <div class="password">
+                                    <input type="password" placeholder="비밀번호" class="room_info" name="room_pw" id="room_pw"
+                                        maxlength="15" />
+                                </div>
+                                <div class="concurrentUser">
+                                    <div class="room_info" id="room_maxUser">0/10</div>
+                                </div>
+                            </div>
+                            <div class="img_field">
+                                <img src="/static/img/defaultRoom.png" alt="" class="room_info" class="room_image" id="room_image">
+                            </div>
+                        </section>
+                        <footer>
+                            <div class="left">
+                                <button class="button backBtn" onclick="enterRoom_PopUp(false);">뒤로가기</button>
+                            </div>
+                            <div class="right">
+                                <button class="button createBtn" onclick="enterRoom('enterRoom');"> 방 접속하기!</button>
+                            </div>
+                        </footer>
+                    </section>
+                </article>
+            </div>
     </aside>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>

@@ -11,25 +11,34 @@ inputFileReturnImg = function (input, inputId) {
 }
 
 var createRoom_PopUp = function (tf) {
-    var targetDom = document.getElementById("createRoom");
+    var targetDom = document.getElementById("createRoom").children[0];
     var value;
 
     if (tf) value = "visible";
     else value = "hidden";
 
     document.getElementById("backgroundCover").style.visibility = value;
-    targetDom.children[0].style.visibility = value;
+    targetDom.style.visibility = value;
 };
-// var enterRoom_PopUp = function (tf) {
-//     var targetDom = document.getElementById("enterRoom");
-//     var value;
+var enterRoom_PopUp = function (tf, name, users, maxUser, img) {
+    var targetDom = document.getElementById("enterRoom").children[0];
+    var value;
 
-//     if (tf) value = "visible";
-//     else value = "hidden";
+    if (tf) {
+        value = "visible";
 
-//     document.getElementById("backgroundCover").style.visibility = value;
-//     targetDom.children[0].style.visibility = value;
-// };
+        var info_field = targetDom.children[0].children[1];
+        
+        info_field.children[0].children[0].children[0].innerHTML = name;
+        info_field.children[0].children[2].children[0].innerHTML = `현재 접속인원: ${users} / 최대 접속인원: ${maxUser}`;
+        info_field.children[1].children[0].src = img;
+    }
+    else value = "hidden";
+
+
+    document.getElementById("backgroundCover").style.visibility = value;
+    targetDom.style.visibility = value;
+};
 
 //todo 바뀐 html구조에 맞게 수정하기
 var createRoom = function(target){
@@ -45,6 +54,17 @@ var createRoom = function(target){
     if(data.room_img) {
         data.img_name = values.room_img.files[0].name;
     }
+    
+    socket.emit("enter room", data);
+}
+var enterRoom = function(target){
+    var targetDom = document.getElementById(target);
+    var values = targetDom.getElementsByClassName("room_info");
+    
+    var data = {
+        room_name: values.room_name.innerHTML,
+        room_pw: values.room_pw.value,
+    };
     
     socket.emit("enter room", data);
 }
@@ -82,15 +102,20 @@ socket.on("update room_list", function (rooms) {
 
     for (var i = 0; i < rooms.length; i++) {
         var room = rooms[i];
-        var content = `<div class="room_container" id="room_${room.name}" onclick="enterRoom_PopUp(true);">
+        var name = room.name;
+        var img = room.img == null ? '/static/img/defaultRoom.png' : '/static/img/roomImg/'+room.img;
+        var admin = room.admin;
+        var usersColor = Object.keys(room.users).length == room.maxUser ? "red" : "green";
+        var usersStr = `${Object.keys(room.users).length}/${room.maxUser}`
+        var content = `<div class="room_container" id="room_${name}" onclick="enterRoom_PopUp(true, '${name}', '${Object.keys(room.users).length}', '${room.maxUser}', '${img}');">
             <button class="room_button">
-                <img class="room_image" src="/static/img/${room.img == null ? 'defaultRoom.png' : 'roomImg/'+room.img}">
-                <div class="room_name">${room.name}</div>
+                <img class="room_image" src="${img}">
+                <div class="room_name">${name}</div>
                 <div class="room_padding"></div>
                 <div class="extra_info">
-                    <div class="host_name">${room.admin}</div>
-                    <div class="count" style="color:${Object.keys(room.users).length == room.maxUser ? "red" : "green"}">
-                        ${Object.keys(room.users).length}/${room.maxUser}
+                    <div class="host_name">${admin}</div>
+                    <div class="count" style="color:${usersColor}">
+                        ${usersStr}
                     </div>
                 </div>
             </button>
