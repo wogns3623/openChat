@@ -54,10 +54,27 @@
 				-moz-box-shadow: 2px 2px 4px #999999;
     			-webkit-box-shadow: 2px 2px 4px #999999;
 			}
+			#created{
+				padding-left: 100px;
+			}
+			#room_image{
+				position: relative;
+				float: left;
+				top: -85px;
+				left: 2.5%;
+				width: 70px;
+				height: 70px;
+
+				border: 1px solid blue;
+            	border-radius: 100%;
+         	  	-moz-border-radius: 100%;
+       		    -webkit-border-radius: 100%;
+
+			}
 		</style>
 		<body style="margin: 0%;">
 			<div class="title">
-				<p style="font-size: 2em; margin: auto 0; margin-left:10px;">방 목록</p>
+				<p style="font-size: 2em; margin: auto 0; margin-left:10px; min-width: 120px;">방 목록</p>
 				<p style="margin-top: auto; color:white; margin-bottom: 10px; margin-left: 10px;">원하는 대화방을 찾거나 직접 대화방을 만들어 보세요.</p>
 				<input type="button" value="로그아웃" style="margin-left: auto; width: 100px;">
 			</div>
@@ -66,17 +83,20 @@
 					<input type="button" class="room_button" value="새로운 방 생성">
 				</div>
 				<div class="room">
-					<input type="button" class="room_button" value="1번방입니다.">
+					<input type="button" class="room_button" id="created" value="1번방입니다.">
+					<img src="" alt="" id="room_image">
 					<p id="host_name">master1</p>
 					<p id="count" style="color:green">0/10</p>
 				</div>
 				<div class="room">
-					<input type="button" class="room_button" value="2번방입니다.">
+					<input type="button" class="room_button" id="created" value="2번방입니다.">
+					<img src="" alt="" id="room_image">
 					<p id="host_name">master2</p>
 					<p id="count" style="color:red;">10/10</p>
 				</div>
 				<div class="room">
-					<input type="button" class="room_button" value="3번방입니다.">
+					<input type="button" class="room_button" id="created" value="3번방입니다.">
+					<img src="" alt="" id="room_image">
 					<p id="host_name">master3</p>
 					<p id="count" style="color:green">5/10</p>
 				</div>
