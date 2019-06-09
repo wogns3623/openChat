@@ -26,5 +26,5 @@ server.listen(3000, function() {
 
 var state = require('./router/state.js');
   
-var io = require('./router/io.js')(server, fs, state, cookie);
-var router = require('./router/main.js')(app, state);
+var io = require('./router/io.js')(server, fs, cookie);
+var router = require('./router/main.js')(app);

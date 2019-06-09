@@ -1,9 +1,9 @@
 var room = require('./room');
 var user = require('./user');
 var message = require('./message');
+var state = require('./state.js');
 
-
-module.exports = function(server, fs, state, cookie) {
+module.exports = function(server, fs, cookie) {
     
     var getUserName = function(socket) {
         if(socket.handshake.headers.cookie) {
@@ -13,6 +13,7 @@ module.exports = function(server, fs, state, cookie) {
                 return userInfo.user_name
             }
         }
+        console.log("fail to get cookie information");
         return;
     }
 
@@ -78,13 +79,17 @@ module.exports = function(server, fs, state, cookie) {
             }
         });
 
+        socket.on('get room_list', function() {
+            io.emit('update room_list', state.rooms);
+        });
+
         socket.on('enter room', function(data) {
             var currentRoom;
             if(state.rooms[data.room_name] == undefined){
                 currentRoom = new room(
                     Object.keys(state.rooms).length+1,
                     data.room_name,
-                    state.users[getUserName(socket)],
+                    state.users[getUserName(socket)].name,
                     null,
                     10,
                     data.room_pw
@@ -99,11 +104,12 @@ module.exports = function(server, fs, state, cookie) {
                 socket.emit('enter room success', {
                     room_name: data.room_name
                 });
+
+                io.emit('update room_list', state.rooms);
+
             } else {
                 socket.emit('enter room fail');
             }
-
-
         });
 
         socket.on('join room', function(data) {
@@ -201,6 +207,9 @@ module.exports = function(server, fs, state, cookie) {
                     console.log("user "+currentUser.name+" leave room");
                 } else if(result == 2) {
                     state.removeRoom(currentRoom);
+                    
+                    io.emit('update room_list', state.rooms);
+
                     console.log("room Removed!");
                 } else {
                     console.log("그 유저는 방에 없어요!");

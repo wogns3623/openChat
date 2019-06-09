@@ -1,3 +1,5 @@
+var state = require('./state.js');
+
 module.exports = class room{
     constructor(id, name, admin, img, maxUser=10, password=null){
         this.id = id;
@@ -15,18 +17,18 @@ module.exports = class room{
 
     connectUser(user){
         user.connectRoom(this.name);
-        this.users[user.name] = user;
-        if(this.visitedUsers[user.name] == undefined) this.visitedUsers[user.name] = user;
+        this.users[user.name] = user.name;
+        if(this.visitedUsers[user.name] == undefined) this.visitedUsers[user.name] = user.name;
     }
 
     disconnectUser(user){
         if(this.users[user.name] == undefined) {
             return false;
-        } else if(user == this.admin) {
+        } else if(user.name == this.admin) {
             console.log("방장이 퇴장하여 방을 제거합니다.");
             var userArr = Object.values(this.users);
             for( var i=0; i<userArr.length; i++ ){
-                userArr[i].disconnectRoom();
+                state.users[userArr[i]].disconnectRoom();
             }
 
             return 2;

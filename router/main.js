@@ -1,4 +1,6 @@
-module.exports = function(app, state) {
+var state = require('./state.js');
+
+module.exports = function(app) {
 
     app.get('/', function(req, res) {
         res.render('login');

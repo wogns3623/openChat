@@ -3,6 +3,11 @@
     <head>
         <meta charset="UTF-8">
         <title><%=title %></title>
+        <style>
+            .room.box{
+                border: 1px solid black;
+            }
+        </style>
     </head>
 
     <body>
@@ -24,10 +29,10 @@
         <script>
             var socket = io();
 
-            var enterRoom = function(roomDiv) {
+            var enterRoom = function(nameID, pwID) {
                 data = {
-                    room_name: roomDiv.children[0],
-                    room_pw: roomDiv.children[1].value
+                    room_name: nameID.innerText,
+                    room_pw: pwID.value
                 }
                 socket.emit("enter room", data);
             };
@@ -41,6 +46,7 @@
                     socket.user_name = data.user_name;
     
                     document.getElementById("user_name").innerText = socket.user_name;
+                    socket.on("get room_list");
                 });
     
                 $("#room_info").submit(function(event) {
@@ -67,6 +73,34 @@
                     location.href = "/";
                 });
                 
+                socket.on("update room_list", function(rooms) {
+                    console.log("update room_list");
+
+                    var roomArea = document.getElementById("room_area");
+                    roomArea.innerHTML = "";
+
+                    var rooms = Object.values(rooms);
+
+                    for(var i=0; i<rooms.length; i++){
+                        var room = rooms[i];
+                        var content = `<div class="room box" id="room_${room.name}">
+                            <span></span>
+                                <div class="room name" id="room_name_${room.name}">${room.name}</div>
+                                <input type="password" class="room pw" id="room_pw_${room.name}">
+                                <div class="room users">
+                                    <span class room currentUsers>${Object.keys(room.users).length}</span>/
+                                    <span class room maxUsers>${room.maxUser}</span>
+                                </div>
+                                <div class="room host">${room.admin}</div>
+                            </span>
+                            <span>
+                                <button class="room button" onclick="enterRoom(room_name_${room.name}, room_pw_${room.name})">뒤로가기</button>
+                            </span>
+                        </div>`;
+
+                        roomArea.innerHTML += content;
+                    }
+                });
             });
         </script>
     </body>

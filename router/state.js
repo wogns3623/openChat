@@ -1,6 +1,6 @@
 var fs = require('fs');
 
-class state {
+state = new class state {
     constructor() {
         this.users = {};
         this.inactivateUsers = {};
@@ -17,7 +17,7 @@ class state {
     removeRoom(room) {
         var visitedUsers = Object.keys(room.visitedUsers);
         for (var i = 0; i < visitedUsers.length; i++) {
-            var user = visitedUsers[i];
+            var user = this.users[visitedUsers[i]];
             if (this.users[user]) {
                 this.users[user].visitedRooms[room.name] = undefined;
             }
@@ -75,6 +75,6 @@ class state {
             delete this.inactivateUsers[user.name];
         }
     }
-}
+}();
 
-module.exports = new state();
+module.exports = state;
