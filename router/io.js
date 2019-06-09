@@ -80,7 +80,8 @@ module.exports = function(server, fs, cookie) {
         });
 
         socket.on('get room_list', function() {
-            io.emit('update room_list', state.rooms);
+            console.log("방 리스트 정보 요청을 받았습니다!");
+            io.emit("update room_list", state.rooms);
         });
 
         socket.on('enter room', function(data) {
@@ -93,7 +94,21 @@ module.exports = function(server, fs, cookie) {
                     null,
                     10,
                     data.room_pw
-                )
+                );
+
+                if(data.room_img){
+                    currentRoom.img = data.room_name+"."+data.img_name.split(".").pop();
+                    fs.writeFile("./public/img/roomImg/"+currentRoom.img, data.room_img, 'binary', function(err){
+                        if(err){
+                            console.log('get room_img fail');
+                        } else {
+                            console.log('get room_img success!');
+                        }
+                    });
+                } else {
+                    console.log('get room_img success!');
+                }
+                
                 state.addRoom(currentRoom);
             } else {
                 currentRoom = state.rooms[data.room_name];
@@ -104,8 +119,6 @@ module.exports = function(server, fs, cookie) {
                 socket.emit('enter room success', {
                     room_name: data.room_name
                 });
-
-                io.emit('update room_list', state.rooms);
 
             } else {
                 socket.emit('enter room fail');
@@ -126,6 +139,8 @@ module.exports = function(server, fs, cookie) {
             }
 
             currentRoom.connectUser(currentUser);
+
+            io.emit('update room_list', state.rooms);
 
             socket.join(currentRoom.name, function() {
                 console.log(currentUser.name+' successfuly join in room '+currentRoom.name);
@@ -184,8 +199,6 @@ module.exports = function(server, fs, cookie) {
                 return;
             }
             console.log("user "+currentUser.name+" disconnected because of "+reason);
-
-            console.log(currentUser);
 
             if(currentUser.connectedRoom != null){
                 var currentRoom = state.rooms[currentUser.connectedRoom];
