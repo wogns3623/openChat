@@ -1,0 +1,48 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title> Openchat </title>
+    <link rel="stylesheet" href="./css/room.css" type="text/css" />
+</head>
+
+<body style="margin: 0%;">
+    <main>
+        <header id="top_bar">
+            <div class="room_info" id="room_image">
+                <img src=""> <!-- 방 대표 이미지-->
+            </div>
+            <div class="room_info" id="room_name">
+                방 제목
+            </div>
+            <div class="padding"></div>
+            <nav class="button_box">
+                <button class="button backBtn" onclick="leaveRoom();">뒤로가기</button>
+            </nav>
+        </header>
+
+        <article>
+            <div id="chat_area">
+            </div>
+        </article>
+
+        <div id="input_area">
+            <div name="message_info" id="message_info">
+                <input type="text" placeholder="여기에 보낼 메세지를 입력하세요." name="input_text" id="input_text" maxlength="120"
+                    autofocus required></textarea>
+                <button type="submit" id="input_button" onclick="submitMessage();"><img src="./img/airplane.png" alt=""
+                    id="send_image"></button>
+            </div>
+        </div>
+    </main>
+
+    <aside id="list_area">
+        <!-- 방 인윈 표시(프로필 이름,프로필 사진,총 인원수/최대 인원수) -->
+        <div class="list_info" style="font-size: 1.3em;">현재 방에 참여 중인 사용자</div>
+        <div id="user_list"></div>
+    </aside>
+
+    <script src="./js/room.js"></script>
+</body>
+
+</html>

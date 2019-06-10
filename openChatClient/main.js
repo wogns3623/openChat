@@ -1,14 +1,17 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, ipcMain, session} = require('electron')
+const serverIP = "http://172.17.96.49:3000";
+var currentRoom;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
+
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1600,
+    width: 1100,
     height: 900,
     title: "openChat",
     frame: true,
@@ -18,12 +21,10 @@ function createWindow () {
   })
 
   // and load the index.html of the app.
-  // mainWindow.loadFile('index.html')
-
-  mainWindow.loadURL("http://localhost:3000")
+  mainWindow.loadFile('./renderer/login.html');
 
   // Open the DevTools.
-//   mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -54,3 +55,46 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+ipcMain.on('quit app', (event) => {
+    mainWindow = null;
+    app.quit();
+})
+
+ipcMain.on('get serverIP', (event) => {
+    event.returnValue = serverIP;
+})
+
+ipcMain.on('get userName', (event) => {
+    session.defaultSession.cookies.get({url: serverIP})
+    .then((cookies) => {
+        event.returnValue = cookies[0].value;
+    }).catch((error) => {
+        console.log(error);
+    })
+})
+
+ipcMain.on('render', (event, target) => {
+    mainWindow.loadFile('./renderer/'+target);
+})
+
+ipcMain.on('set cookie', (event, user_name) => {
+
+    const cookie = { url: serverIP, name: 'userName', value: user_name }
+
+    session.defaultSession.cookies.set(cookie)
+    .then(() => {
+        event.reply('set cookie success');
+    }, (error) => {
+        console.log(error);
+        event.reply('set cookie fail');
+    })
+})
+
+ipcMain.on("set currentRoom", (event, room_name) => {
+    currentRoom = room_name;
+    event.returnValue = currentRoom;
+})
+
+ipcMain.on("get currentRoom", (event) => {
+    event.returnValue = currentRoom;
+})

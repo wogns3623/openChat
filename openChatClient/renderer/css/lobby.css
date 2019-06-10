@@ -1,0 +1,125 @@
+body {
+    margin: 0px;
+}
+
+.title {
+    position: static;
+    width: 100%;
+    height: 60px;
+    background: gray;
+    display: flex;
+}
+
+#list_area {
+    position: relative;
+    width: 100%;
+    height: -webkit-calc(100% - 60px);
+    height: -moz-calc(100% - 60px);
+    height: calc(100% - 60px);
+    background: skyblue;
+}
+
+.room_container {
+    position: relative;
+    width: 96%;
+    height: 100px;
+    margin-left: 2%;
+    padding-top: 10px;
+    display: block;
+}
+
+.room_container .room_button {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+
+    box-shadow: 2px 2px 4px #999999;
+    -moz-box-shadow: 2px 2px 4px #999999;
+    -webkit-box-shadow: 2px 2px 4px #999999;
+}
+
+.room_container .room_image {
+    flex: none;
+
+    width: 70px;
+    height: 70px;
+    margin-left: 10px;
+
+    border-radius: 100%;
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
+}
+
+.room_container .room_name {
+    flex: none;
+
+    margin-left: 10px;
+
+    font-size: 50px;
+}
+
+.padding {
+    flex: auto;
+}
+
+.room_container .extra_info {
+    flex: none;
+
+    height: 70px;
+    margin-right: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.room_container .host_name {
+    font-size: 23px;
+}
+
+.room_container .count {
+    font-size: 23px;
+}
+
+.room_s {
+    z-index: 2;
+    position: fixed;
+    width: 130px;
+    height: 130px;
+    display: block;
+    background: black;
+    left: -webkit-calc(100% - 140px);
+    left: -moz-calc(100% - 140px);
+    left: calc(100% - 140px);
+    top: -webkit-calc(100% - 140px);
+    top: -moz-calc(100% - 140px);
+    top: calc(100% - 140px);
+
+    border-radius: 100%;
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
+}
+
+.room_created {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    padding: 0;
+
+    border-radius: 100%;
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
+}
+
+#plus_image {
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
+}

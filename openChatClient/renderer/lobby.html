@@ -1,0 +1,104 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title> Openchat </title>
+    <link rel="stylesheet" href="./css/lobby.css" type="text/css" />
+    <link rel="stylesheet" href="./css/createRoom.css" type="text/css" />
+    <link rel="stylesheet" href="./css/enterRoom.css" type="text/css" />
+<body style="margin: 0%;">
+    <div class="title">
+        <p style="font-size: 2em; margin: auto 0; margin-left:10px; min-width: 120px;">방 목록</p>
+        <p style="margin-top: auto; color:white; margin-bottom: 10px; margin-left: 10px;">
+            원하는 대화방을 찾거나 직접 대화방을 만들어 보세요.
+        </p>
+        <input type="button" value="로그아웃" style="margin-left: auto; width: 100px;" onclick="disconnect();">
+    </div>
+    <div id="list_area">
+    </div>
+    <aside id="fixed_area">
+        <div class="room_s">
+            <button class="room_created"><img src="./img/plus.png" alt="" id="plus_image"
+                    onclick="createRoom_PopUp(true);"></button>
+        </div>
+        <div id="backgroundCover"></div>
+        <div class="pop-up" id="createRoom">
+            <article class="container">
+                <section class="main_container">
+                    <header>
+                        Create Room
+                    </header>
+                    <section class="content">
+                        <div class="text_field">
+                            <div class="name">
+                                <input type="text" placeholder="방 이름" class="room_info" name="room_name" id="room_name"
+                                    maxlength="15" autofocus required />
+                            </div>
+                            <div class="password">
+                                <input type="password" placeholder="비밀번호" class="room_info" name="room_pw" id="room_pw"
+                                    maxlength="15" />
+                            </div>
+                            <div class="concurrentUser">
+                                <input type="number" placeholder="최대 접속자 수" class="room_info" name="room_maxUser"
+                                    id="room_maxUser" min="2" max="999" required />
+                            </div>
+                        </div>
+                        <div class="img_field">
+                            <img src="./img/defaultRoom.png" alt="" class="room_image" id="room_image">
+                            <input type="file" class="room_info" name="room_img" accept=".jpg,.jpeg,.png,.gif"
+                                onchange="inputFileReturnImg(this,'room_image');">
+                        </div>
+                    </section>
+                    <footer>
+                        <div class="left">
+                            <button class="button backBtn" onclick="createRoom_PopUp(false);">뒤로가기</button>
+                        </div>
+                        <div class="right">
+                            <button class="button createBtn" onclick="createRoom('createRoom');"> 방 만들기!</button>
+                        </div>
+                    </footer>
+                </section>
+            </article>
+        </div>
+        <div class="pop-up" id="enterRoom">
+                <article class="container">
+                    <section class="main_container">
+                        <header>
+                            Enter Room
+                        </header>
+                        <section class="content">
+                            <div class="text_field">
+                                <div class="name">
+                                    <div class="room_info" id="room_name">방 이름</div>
+                                </div>
+                                <div class="password">
+                                    <input type="password" placeholder="비밀번호" class="room_info" name="room_pw" id="room_pw"
+                                        maxlength="15" />
+                                </div>
+                                <div class="concurrentUser">
+                                    <div class="room_info" id="room_maxUser">0/10</div>
+                                </div>
+                            </div>
+                            <div class="img_field">
+                                <img src="./img/defaultRoom.png" alt="" class="room_info" class="room_image" id="room_image">
+                            </div>
+                        </section>
+                        <footer>
+                            <div class="left">
+                                <button class="button backBtn" onclick="enterRoom_PopUp(false);">뒤로가기</button>
+                            </div>
+                            <div class="right">
+                                <button class="button createBtn" onclick="enterRoom('enterRoom');"> 방 접속하기!</button>
+                            </div>
+                        </footer>
+                    </section>
+                </article>
+            </div>
+    </aside>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./js/lobby.js"></script>
+</body>
+</head>
+
+</html>
