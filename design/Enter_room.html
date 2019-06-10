@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  	<title>방 참가</title>
+  	<style>
+  	body {
+  		background: skyblue;
+  	}
+  		.title {
+  			position: relative;
+  			top: 50px;
+  			text-align: center;
+  		}
+		.room_name {
+			float: left;
+			position: absolute;
+			top: 150px;
+			width: 60%;
+			left: 15%;
+			text-align: left;
+		}
+		.password {
+			float: left;
+			position: absolute;
+			top: 250px;
+			width: 60%;
+			left: 15%;
+			text-align: left;
+		}
+		.profile {
+			position: absolute;
+			top: 320px;
+			right: 15%;
+		}
+		.profile {
+    		width: 250px;
+    		height: 250px;
+    		position: absolute;
+    		overflow: hidden;
+    		border-radius: 50%;
+    		top: 150px;
+    		right: 20%;
+		}
+
+		img {
+    		display: inline;
+    		margin: 0 auto;
+    		height: 100%;
+    		width: auto;
+		}
+
+		a {
+			-webkit-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+			-moz-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+			-ms-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+			-o-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+			transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+			display: block;
+			margin: 20px auto;
+			max-width: 180px;
+			text-decoration: none;
+			border-radius: 4px;
+			padding: 20px 30px;
+		}
+		a.back {
+			color: rgba(30, 22, 54, 0.6);
+			box-shadow: rgba(30, 22, 54, 0.4) 0 0px 0px 2px inset;
+			position: absolute;
+			top: 500px;
+			left: 15%;
+		}
+		a.back:hover {
+			color: rgba(255, 255, 255, 0.85);
+			box-shadow: rgba(30, 22, 54, 0.7) 0 0px 0px 40px inset;
+		}
+		a.create {
+			color: rgba(30, 22, 54, 0.6);
+			box-shadow: rgba(30, 22, 54, 0.4) 0 0px 0px 2px inset;
+			position: absolute;
+			top: 500px;
+			left: 30%;
+		}
+		a.create:hover {
+			color: rgba(255, 255, 255, 0.85);
+			box-shadow: rgba(30, 22, 54, 0.7) 0 0px 0px 40px inset;
+		}
+	</style>
+</head>
+<body>
+	<div class = "title">
+		<img src="logo.png" width="300">
+	</div>
+	<div class = "room_name">
+		<p><font color="black" size=6><strong>방 이름 방 이름 방 이름</strong></font></p>
+	</div>
+	<div class = "password">
+		<p><font color="black" size=5>비밀번호</font></p>
+		<input type="password" size="50" onfocus="this" style="background-color: skyblue; height:50px; border:0px; border-bottom:black 2px solid">
+	</div>
+	<div class = "button">
+		<a href="#" class="back">뒤로가기</a>
+		<a href="#" class="create">입장</a>
+	</div>
+	<div class = "profile">
+		<img src="http://mblogthumb2.phinf.naver.net/20150427_261/ninevincent_1430122791768m7oO1_JPEG/kakao_1.jpg?type=w2" class="rounded">
+	</div>
+</html>
