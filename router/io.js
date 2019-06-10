@@ -106,9 +106,10 @@ module.exports = function (server, fs, cookie) {
 
         socket.on('enter room', function (data) {
             var currentRoom;
-            if(data.room_maxUser == "" || data.room_name == ""){
+            if(data.room_name == ""){
                 return socket.emit('enter room fail', "입력이 제대로 들어오지 않았습니다");
             }
+            if(data.room_maxUser == "") data.room_maxUser = 10;
             if (state.rooms[data.room_name] == undefined) {
                 currentRoom = new room(
                     Object.keys(state.rooms).length + 1,

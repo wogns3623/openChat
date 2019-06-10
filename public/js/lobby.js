@@ -48,6 +48,11 @@ var enterRoom_PopUp = function (tf, name, users, maxUser, img) {
 var createRoom = function(target){
     var targetDom = document.getElementById(target);
     var values = targetDom.getElementsByClassName("room_info");
+
+    if(values.room_name.value == "") {
+        alert("방 이름을 입력해주세요!");
+        return;
+    }
     
     var data = {
         room_name: values.room_name.value,
