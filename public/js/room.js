@@ -19,72 +19,77 @@ var leaveRoom = function (data) {
     location.href = "/lobby";
 }
 
-document.getElementById('room_name').innerHTML = decodeURI(location.href.split("/")[4]);
+document.title = decodeURI(location.href.split("/")[4]);
+document.getElementById('room_name').innerHTML = document.title;
 
-$(document).ready(function () {
+socket.on('connect', function (data) {
+    socket.emit("get cookie");
+});
 
-    socket.on('connect', function (data) {
-        socket.emit("get cookie");
+socket.on('get cookie success', function (data) {
+    socket.user_name = data.user_name;
+    //socket.id = socket.user_name;
+    socket.emit('join room', {
+        room_name: document.title
     });
+});
 
-    socket.on('get cookie success', function (data) {
-        socket.user_name = data.user_name;
-        //socket.id = socket.user_name;
-        socket.emit('join room', {
-            room_name: decodeURI(location.href.split("/")[4])
-        });
+socket.on("join room success", function(data) {
+    document.getElementById("room_image").children[0].src = "/static/img/"+data.img;
+});
+
+// $("#message_info").submit(function (event) {
+//     console.log('메시지를 송신합니다!');
+//     event.preventDefault();
+
+//     socket.emit('send message', {
+//         content: $("#input_text").val(),
+//         date: new Date().toISOString(),
+//     });
+//     $("#input_text").val('');
+// });
+
+var submitMessage = function() {
+    socket.emit('send message', {
+        content: document.getElementById("input_text").value,
+        date: new Date().toISOString(),
     });
+    document.getElementById("input_text").value = '';
+}
 
-    socket.on("join room success", function(data) {
-        document.getElementById("room_image").children[0].src = "/static/img/"+data.img;
-    });
+socket.on("receive beforeMessages", function (data) {
+    console.log("이전에 주고받은 메시지들을 수신하였습니다!");
+    //if(currentMsg.isJoinMsg) //TODO join메시지만의 형식 필요함
+    for (var i = 0; i < data.msgs.length; i++) {
+        var msg = data.msgs[i];
+        addMessage(msg);
+    }
+});
 
-    $("#message_info").submit(function (event) {
-        console.log('메시지를 송신합니다!');
-        event.preventDefault();
+socket.on("receive message", function (data) {
+    console.log("메시지를 수신하였습니다!");
+    //if(currentMsg.isJoinMsg) //TODO join메시지만의 형식 필요함
+    addMessage(data.msg);
+});
 
-        socket.emit('send message', {
-            content: $("#input_text").val(),
-            date: new Date().toISOString(),
-        });
-        $("#input_text").val('');
-    });
+socket.on("remove room", function () {
+    location.href = "/lobby";
+});
 
-    socket.on("receive beforeMessages", function (data) {
-        console.log("이전에 주고받은 메시지들을 수신하였습니다!");
-        //if(currentMsg.isJoinMsg) //TODO join메시지만의 형식 필요함
-        for (var i = 0; i < data.msgs.length; i++) {
-            var msg = data.msgs[i];
-            addMessage(msg);
-        }
-    });
+socket.on("connection fail", function () {
+    location.href = "/";
+});
 
-    socket.on("receive message", function (data) {
-        console.log("메시지를 수신하였습니다!");
-        //if(currentMsg.isJoinMsg) //TODO join메시지만의 형식 필요함
-        addMessage(data.msg);
-    });
+socket.on("update user_list", function(userList) {
+    console.log("update user list!");
+    userListDom = document.getElementById("user_list");
+    userListDom.innerHTML = "";
 
-    socket.on("remove room", function () {
-        location.href = "/lobby";
-    });
-
-    socket.on("connection fail", function () {
-        location.href = "/";
-    });
-
-    socket.on("update user_list", function(userList) {
-        console.log("update user list!");
-        userListDom = document.getElementById("user_list");
-        userListDom.innerHTML = "";
-
-        for(var i=0; i<userList.length; i++){
-            var user = userList[i];
-            userListDom.innerHTML += `<div class="list_profile">
-                <img src="/static/img/${user.img}" alt="" class="profile_picture">
-                <p class="user_name" style="font-size: 1.5em; margin: 0.5%; text-align: center; padding-top: 0.6em;">${user.name}</p>
-            </div>`
-        }
-    });
-
+    for(var i=0; i<userList.length; i++){
+        var user = userList[i];
+        userListDom.innerHTML += `<div class="list_profile">
+            <img src="/static/img/${user.img}" alt="" class="profile_picture">
+            <p class="user_name" style="font-size: 1.5em; margin: 0.5%; text-align: center; padding-top: 0.6em;">${user.name}</p>
+        </div>`
+    }
 });

@@ -113,7 +113,7 @@
             z-index: 0;
         }
 
-        #input_area>form {
+        #input_area>#message_info {
             position: relative;
             width: 100%;
             height: 90%;
@@ -125,7 +125,7 @@
             display: flex;
         }
 
-        #input_area>form>#input_text {
+        #input_area>#message_info>#input_text {
             position: relative;
             height: 100%;
             font-size: 1.5em;
@@ -135,7 +135,7 @@
             flex: auto;
         }
 
-        #input_area>form>#input_button {
+        #input_area>#message_info>#input_button {
             position: relative;
             float: right;
             padding: 0;
@@ -244,12 +244,13 @@
         </article>
 
         <div id="input_area">
-            <form action="" accept-charset="UTF-8" name="message_info" id="message_info">
+            <div name="message_info" id="message_info">
                 <input type="text" placeholder="여기에 보낼 메세지를 입력하세요." name="input_text" id="input_text" maxlength="120"
                     autofocus required></textarea>
-                <button type="submit" id="input_button"><img src="/static/img/airplane.png" alt=""
+                <button type="submit" id="input_button" onclick="submitMessage();"><img src="/static/img/airplane.png" alt=""
                     id="send_image"></button>
-            </form>
+                </div>
+            </div>
         </div>
     </main>
 

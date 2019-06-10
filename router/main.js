@@ -3,16 +3,14 @@ var state = require('./state.js');
 module.exports = function(app) {
 
     app.get('/', function(req, res) {
-        res.render('login');
+        res.render('login.html');
     });
     
     app.get('/lobby', function(req, res) {
         var userInfo = req.cookies.userInfo;
 
         if(userInfo != undefined && state.users[userInfo.user_name] != undefined){
-            res.render('lobby', {
-                title: 'lobby'
-            });
+            res.render('lobby.html');
         } else {
             res.redirect('/');
         }
@@ -27,9 +25,7 @@ module.exports = function(app) {
         } else if(state.rooms[req.params.roomName] == undefined ) {
             res.redirect('/lobby');
         } else {
-            res.render('room', {
-                title: req.params.roomName,
-            });
+            res.render('room.html');
         }
     });
 
@@ -49,8 +45,7 @@ module.exports = function(app) {
         };
 
         res.cookie('userInfo', userInfo);
-        // res.cookie('userInfo', userInfo, {maxAge: 1000*60*60});
-
+        
         res.json(result);
     });
 }

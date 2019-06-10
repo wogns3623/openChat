@@ -4,14 +4,13 @@ var app = express();
 var http = require('http');
 var server = http.createServer(app);
 
-var ejs = require('ejs');
 var fs = require("fs");
 var cookie = require('cookie');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
+app.set('view engine', 'html');
 app.engine('html', require('ejs').renderFile);
 
 app.use('/static', express.static('public'));
