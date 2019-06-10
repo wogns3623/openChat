@@ -38,17 +38,6 @@ socket.on("join room success", function(data) {
     document.getElementById("room_image").children[0].src = "/static/img/"+data.img;
 });
 
-// $("#message_info").submit(function (event) {
-//     console.log('메시지를 송신합니다!');
-//     event.preventDefault();
-
-//     socket.emit('send message', {
-//         content: $("#input_text").val(),
-//         date: new Date().toISOString(),
-//     });
-//     $("#input_text").val('');
-// });
-
 var submitMessage = function() {
     socket.emit('send message', {
         content: document.getElementById("input_text").value,

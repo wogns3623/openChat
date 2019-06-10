@@ -1,0 +1,26 @@
+{
+  "name": "openChatServer",
+  "version": "1.0.0",
+  "description": "opensource Chat app for desktop run in linux OS",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wogns3623/openChat.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wogns3623/openChat/issues"
+  },
+  "homepage": "https://github.com/wogns3623/openChat#readme"
+}
