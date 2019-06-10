@@ -3,10 +3,13 @@ var socket = io();
 var addMessage = function (currentMsg) {
     var chat_area = document.getElementById("chat_area");
     messageHtml = `<div class="message box" id="message_${currentMsg.id}">
-                    <img src="/static/img/${currentMsg.writerImg}" alt="" class="message user_img">
-                    <p class="message user_name">${currentMsg.writer}</p>
-                    <p class="message content">${currentMsg.content}</p>
-                </div>`
+        <img src="/static/img/${currentMsg.writerImg}" alt="" class="message user_img">
+        <p class="message user_name">
+            ${currentMsg.writer}
+            <span class="message date" style="font-size: 0.7em; left: 170px; color: gray">${currentMsg.date}</span>
+        </p>
+        <p class="message content">${currentMsg.content}</p>
+    </div>`
 
     chat_area.innerHTML += messageHtml;
     chat_area.scrollTop = chat_area.scrollHeight;
@@ -68,6 +71,20 @@ $(document).ready(function () {
 
     socket.on("connection fail", function () {
         location.href = "/";
+    });
+
+    socket.on("update user_list", function(userList) {
+        console.log("update user list!");
+        userListDom = document.getElementById("user_list");
+        userListDom.innerHTML = "";
+
+        for(var i=0; i<userList.length; i++){
+            var user = userList[i];
+            userListDom.innerHTML += `<div class="list_profile">
+                <img src="/static/img/${user.img}" alt="" class="profile_picture">
+                <p class="user_name" style="font-size: 1.5em; margin: 0.5%; text-align: center; padding-top: 0.6em;">${user.name}</p>
+            </div>`
+        }
     });
 
 });

@@ -56,7 +56,6 @@
             height: 70px;
             margin-left: 10px;
 
-            border: 1px solid blue;
             border-radius: 100%;
             -moz-border-radius: 100%;
             -webkit-border-radius: 100%;
@@ -118,7 +117,6 @@
             display: flex;
             padding: 0;
 
-            border: 2px solid blue;
             border-radius: 100%;
             -moz-border-radius: 100%;
             -webkit-border-radius: 100%;
@@ -137,9 +135,10 @@
 <body style="margin: 0%;">
     <div class="title">
         <p style="font-size: 2em; margin: auto 0; margin-left:10px; min-width: 120px;">방 목록</p>
-        <p style="margin-top: auto; color:white; margin-bottom: 10px; margin-left: 10px;">원하는 대화방을 찾거나 직접 대화방을 만들어 보세요.
+        <p style="margin-top: auto; color:white; margin-bottom: 10px; margin-left: 10px;">
+            원하는 대화방을 찾거나 직접 대화방을 만들어 보세요.
         </p>
-        <input type="button" value="로그아웃" style="margin-left: auto; width: 100px;">
+        <input type="button" value="로그아웃" style="margin-left: auto; width: 100px;" onclick="disconnect();">
     </div>
     <div id="list_area">
     </div>
@@ -167,7 +166,7 @@
                             </div>
                             <div class="concurrentUser">
                                 <input type="number" placeholder="최대 접속자 수" class="room_info" name="room_maxUser"
-                                    id="room_maxUser" required />
+                                    id="room_maxUser" min="2" max="999" required />
                             </div>
                         </div>
                         <div class="img_field">

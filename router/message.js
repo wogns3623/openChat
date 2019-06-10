@@ -4,7 +4,7 @@ module.exports = class message{
         this.writer = writer;
         this.writerImg = writerImg;
         this.content = content;
-        this.date = date;
+        this.date = date.replace("T", " ").substr(0, 19);
         this.isJoinMsg = isJoinMsg;
     }
 }

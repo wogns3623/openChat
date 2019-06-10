@@ -1,6 +1,6 @@
 var socket = io();
 
-inputFileReturnImg = function (input, inputId) {
+var inputFileReturnImg = function (input, inputId) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
         reader.onload = function (e) {
@@ -8,7 +8,11 @@ inputFileReturnImg = function (input, inputId) {
         };
         reader.readAsDataURL(input.files[0]);
     }
-}
+};
+
+var disconnect = function() {
+    location.href = "/";
+};
 
 var createRoom_PopUp = function (tf) {
     var targetDom = document.getElementById("createRoom").children[0];
@@ -84,8 +88,8 @@ socket.on("enter room success", function (data) {
     location.href = "/room/" + data.room_name;
 });
 
-socket.on("enter room fail", function () {
-    alert("비밀번호가 틀렸습니다!");
+socket.on("enter room fail", function (data) {
+    alert(data);
 });
 
 socket.on("connection fail", function () {
@@ -106,8 +110,14 @@ socket.on("update room_list", function (rooms) {
         var img = room.img == null ? '/static/img/defaultRoom.png' : '/static/img/roomImg/'+room.img;
         var admin = room.admin;
         var usersColor = Object.keys(room.users).length == room.maxUser ? "red" : "green";
-        var usersStr = `${Object.keys(room.users).length}/${room.maxUser}`
-        var content = `<div class="room_container" id="room_${name}" onclick="enterRoom_PopUp(true, '${name}', '${Object.keys(room.users).length}', '${room.maxUser}', '${img}');">
+        var usersStr = `${Object.keys(room.users).length}/${room.maxUser}`;
+        var onClickEvent;
+        if(usersColor == "red"){
+            onClickEvent = "alert('꽉 찬 방이라 들어갈 수 없어요!')";
+        } else {
+            onClickEvent = `enterRoom_PopUp(true, '${name}', '${Object.keys(room.users).length}', '${room.maxUser}', '${img}');`
+        }
+        var content = `<div class="room_container" id="room_${name}" onclick="${onClickEvent}">
             <button class="room_button">
                 <img class="room_image" src="${img}">
                 <div class="room_name">${name}</div>

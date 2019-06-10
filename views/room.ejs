@@ -4,35 +4,41 @@
     <meta charset="utf-8" />
     <title> Openchat </title>
     <style>
-        body{
+        body {
             height: 100%;
             display: flex;
         }
-        main{
+
+        main {
             background: skyblue;
 
             flex: 1 1 auto;
             display: flex;
             flex-direction: column;
         }
-        aside{
+
+        aside {
             background: #808080;
 
             width: 250px;
 
             flex: 0 0 auto;
+            display: flex;
+            flex-direction: column;
         }
 
         header {
             background: #666666;
             height: 100px;
 
-            box-shadow: -1px 1px 4px 1px #777777;
+            box-shadow: -1px 1px 1px 1px #777777;
 
             flex: none;
             display: flex;
             align-items: center;
+            z-index: 0;
         }
+
         header>#room_image {
             width: 120px;
 
@@ -40,6 +46,7 @@
             display: flex;
             justify-content: center;
         }
+
         header>#room_image>img {
             width: 80px;
             height: 80px;
@@ -49,6 +56,7 @@
             font-size: 50px;
             color: white;
         }
+
         header>nav {
             width: 120px;
             height: 100%;
@@ -57,39 +65,55 @@
             display: flex;
             align-items: inherit;
         }
+
         header>nav>.backBtn {
             height: 70%;
             margin: 15px;
 
             flex: 1 1 80px;
         }
-        
-        article{
+
+        article {
             height: calc(100% - 180px);
-            flex: none;
+            flex: auto;
+            
+            z-index: 1;
         }
 
         #chat_area {
             position: relative;
             height: 100%;
-            
-            overflow-y: scroll;
+
+            overflow-y: auto;
             overflow-x: hidden;
         }
 
+        #chat_area::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #chat_area::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+            box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+            
+            background-color: #555;
+        }
 
         #input_area {
             position: relative;
             height: 80px;
 
-            box-shadow: -20px -1px 4px 1px #777777;
+            box-shadow: -1px -1px 1px 1px #777777;
 
             flex: none;
             display: flex;
             justify-content: center;
             align-items: center;
+            z-index: 0;
         }
-        #input_area>form{
+
+        #input_area>form {
             position: relative;
             width: 100%;
             height: 90%;
@@ -97,9 +121,10 @@
             margin-left: 5px;
             margin-right: 5px;
             margin-block-end: 0px;
-            
+
             display: flex;
         }
+
         #input_area>form>#input_text {
             position: relative;
             height: 100%;
@@ -109,6 +134,7 @@
             border: 1px solid #999;
             flex: auto;
         }
+
         #input_area>form>#input_button {
             position: relative;
             float: right;
@@ -123,7 +149,6 @@
             margin: 0.5em;
             width: 3em;
             height: 3em;
-            border: 0.1em solid blue;
             border-radius: 100%;
             -moz-border-radius: 100%;
             -webkit-border-radius: 100%;
@@ -140,13 +165,10 @@
 
         .message.box {
             overflow: hidden;
-            max-width: 100%;
-            width: 650px;
+            width: 100%;
             position: relative;
-            border-width: 2px;
-            border-bottom: 2px;
-            border-color: blue;
-            border-style: dashed;
+            margin: 0.5em;
+            margin-left: 0;
         }
 
         .message.content {
@@ -154,11 +176,7 @@
             padding-left: 7em;
             padding-right: 3em;
             position: relative;
-        }
-
-        #chattime {
-            padding-left: auto;
-            position: relative;
+            overflow-wrap: break-word;
         }
 
         #send_image {
@@ -166,18 +184,32 @@
             height: 100%;
         }
 
-        .list_profile{
+        aside>.list_info {
+            box-shadow: 0px -1px 4px 1px #444444;
+            height: 100px;
+
+            flex: none;
+        }
+
+        aside>#user_list {
+            flex: auto;
+
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .list_profile {
             position: relative;
             border-bottom-style: dotted;
             padding-bottom: 0.2em;
             height: 10%;
             display: block;
         }
-        .user_profile.user_name{
+
+        .profile_picture {
             margin: 0.5em;
-            width: 20%;
-            height: 75%;
-            border: 0.1em solid blue;
+            width: 75px;
+            height: 75px;
             border-radius: 100%;
             -moz-border-radius: 100%;
             -webkit-border-radius: 100%;
@@ -202,7 +234,7 @@
             </div>
             <div class="padding"></div>
             <nav class="button_box">
-                <button  class="button backBtn" onclick="leaveRoom();">뒤로가기</button>
+                <button class="button backBtn" onclick="leaveRoom();">뒤로가기</button>
             </nav>
         </header>
 
@@ -215,14 +247,16 @@
             <form action="" accept-charset="UTF-8" name="message_info" id="message_info">
                 <input type="text" placeholder="여기에 보낼 메세지를 입력하세요." name="input_text" id="input_text" maxlength="120"
                     autofocus required></textarea>
-                <button type="submit" id="input_button"><img src="/static/img/airplane.png" alt="" id="send_image"></button>
+                <button type="submit" id="input_button"><img src="/static/img/airplane.png" alt=""
+                    id="send_image"></button>
             </form>
         </div>
     </main>
 
     <aside id="list_area">
         <!-- 방 인윈 표시(프로필 이름,프로필 사진,총 인원수/최대 인원수) -->
-        <div style="font-size: 1.3em; border-style:double; border-width: 0px; border-bottom-width: 1.5px">현재 방에 참여 중인 사용자</div>
+        <div class="list_info" style="font-size: 1.3em;">현재 방에 참여 중인 사용자</div>
+        <div id="user_list"></div>
     </aside>
 
 
