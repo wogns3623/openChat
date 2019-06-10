@@ -111,7 +111,7 @@ socket.on("update room_list", function (rooms) {
             <button class="room_button">
                 <img class="room_image" src="${img}">
                 <div class="room_name">${name}</div>
-                <div class="room_padding"></div>
+                <div class="padding"></div>
                 <div class="extra_info">
                     <div class="host_name">${admin}</div>
                     <div class="count" style="color:${usersColor}">

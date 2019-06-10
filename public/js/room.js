@@ -16,7 +16,7 @@ var leaveRoom = function (data) {
     location.href = "/lobby";
 }
 
-document.getElementById('room_name').innerHTML = location.href.split("/")[4];
+document.getElementById('room_name').innerHTML = decodeURI(location.href.split("/")[4]);
 
 $(document).ready(function () {
 
@@ -28,8 +28,12 @@ $(document).ready(function () {
         socket.user_name = data.user_name;
         //socket.id = socket.user_name;
         socket.emit('join room', {
-            room_name: location.href.split("/")[4]
+            room_name: decodeURI(location.href.split("/")[4])
         });
+    });
+
+    socket.on("join room success", function(data) {
+        document.getElementById("room_image").children[0].src = "/static/img/"+data.img;
     });
 
     $("#message_info").submit(function (event) {

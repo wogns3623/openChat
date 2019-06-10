@@ -92,7 +92,7 @@ module.exports = function(server, fs, cookie) {
                     data.room_name,
                     state.users[getUserName(socket)].name,
                     null,
-                    10,
+                    data.room_maxUser > 500 ? 500 : data.room_maxUser,
                     data.room_pw
                 );
 
@@ -101,6 +101,9 @@ module.exports = function(server, fs, cookie) {
                     fs.writeFile("./public/img/roomImg/"+currentRoom.img, data.room_img, 'binary', function(err){
                         if(err){
                             console.log('get room_img fail');
+                            delete currentRoom;
+                            socket.emit('enter room fail', "이미지를 저장하지 못해 방을 생성하지 못했습니다");
+                            return;
                         } else {
                             console.log('get room_img success!');
                         }
@@ -140,6 +143,9 @@ module.exports = function(server, fs, cookie) {
 
             currentRoom.connectUser(currentUser);
 
+            socket.emit('join room success', {
+                img: currentRoom.img == null ? "defaultRoom.png" : "roomImg/"+currentRoom.img
+            });
             io.emit('update room_list', state.rooms);
 
             socket.join(currentRoom.name, function() {
