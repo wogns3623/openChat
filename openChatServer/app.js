@@ -8,7 +8,7 @@ var fs = require("fs");
 
 app.use('/static', express.static('public'));
 
-server.listen(3000, function() {
+server.listen(3303, function() {
     console.log('Socket IO server listening on port 3000');
 });
 

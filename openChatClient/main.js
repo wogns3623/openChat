@@ -1,6 +1,8 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow, ipcMain, session} = require('electron')
-const serverIP = "http://172.17.96.49:3000";
+const ip = "172.17.65.177";
+const port = "3303";
+const serverIP = `http://${ip}:${port}`;
 var currentRoom;
 
 // Keep a global reference of the window object, if you don't, the window will
