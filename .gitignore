@@ -93,7 +93,3 @@ serverApp/
 
 # vsCode editor
 .vscode/
-
-# user/room Img
-roomImg/
-userImg/
